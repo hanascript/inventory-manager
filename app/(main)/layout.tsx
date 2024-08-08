@@ -1,11 +1,10 @@
 import { Navbar } from '@/components/navbar/navbar';
-import { Sidebar } from '@/components/sidebar';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
-      {children}
+      <main className='p-4 md:p-8'>{children}</main>
     </>
   );
 }

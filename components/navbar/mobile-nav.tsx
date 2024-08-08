@@ -5,13 +5,13 @@ import { Logo } from './logo';
 import { NavLink } from './nav-link';
 
 type Props = {
-  userLinks: {
+  links: {
     href: string;
     text: string;
   }[];
 };
 
-export const MobileNavbar = ({ userLinks }: Props) => {
+export const MobileNavbar = ({ links }: Props) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -27,7 +27,7 @@ export const MobileNavbar = ({ userLinks }: Props) => {
       <SheetContent side='left'>
         <nav className='grid gap-6 text-lg font-medium'>
           <Logo />
-          {userLinks.map(link => (
+          {links.map(link => (
             <NavLink
               key={link.href}
               href={link.href}

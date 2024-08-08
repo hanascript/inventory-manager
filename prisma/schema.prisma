@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductStatus {
+  draft
+  active
+  archived
+}
+
+enum ProductVariantSize {
+  s
+  m
+  l
+  xl
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  description String           @db.Text
+  status      ProductStatus    @default(draft)
+  variants    ProductVariant[]
+  category    String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model ProductVariant {
+  id        String             @id @default(cuid())
+  price     Float
+  stock     Int
+  color     String
+  size      ProductVariantSize @default(s)
+  product   Product            @relation(fields: [productId], references: [id])
+  productId String
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
