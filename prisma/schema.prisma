@@ -31,6 +31,7 @@ model Product {
   name        String
   description String           @db.Text
   status      ProductStatus    @default(draft)
+  price       Float
   variants    ProductVariant[]
   category    String?
   createdAt   DateTime         @default(now())
@@ -39,7 +40,6 @@ model Product {
 
 model ProductVariant {
   id        String             @id @default(cuid())
-  price     Float
   stock     Int
   color     String
   size      ProductVariantSize @default(s)

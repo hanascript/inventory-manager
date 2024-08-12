@@ -1,17 +1,17 @@
 'use client';
 
 import { z } from 'zod';
+import { PlusCircle } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { productSchema } from '@/schemas';
-import { CardWrapper } from './card-wrapper';
-import { FormField, FormItem, FormControl } from './ui/form';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { CardWrapper } from '@/components/card-wrapper';
+import { FormField, FormItem, FormControl } from '@/components/ui/form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Button } from './ui/button';
-import { PlusCircle } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 export const ProductVariants = () => {
   const { getValues, control, setError } = useFormContext<z.infer<typeof productSchema>>();
@@ -23,7 +23,6 @@ export const ProductVariants = () => {
 
   const handleAddVariant = () => {
     append({
-      price: 15,
       stock: 25,
       color: '#000000',
       size: 's',
@@ -38,7 +37,6 @@ export const ProductVariants = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Price</TableHead>
             <TableHead>Stock</TableHead>
             <TableHead>Color</TableHead>
             <TableHead className='w-[100px]'>Size</TableHead>
@@ -50,23 +48,6 @@ export const ProductVariants = () => {
               <TableCell>
                 <FormField
                   control={control}
-                  name={`variants.${index}.price`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder='0.00'
-                          type='number'
-                          {...field}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </TableCell>
-              <TableCell>
-                <FormField
-                  control={control}
                   name={`variants.${index}.stock`}
                   render={({ field }) => (
                     <FormItem>
@@ -74,6 +55,7 @@ export const ProductVariants = () => {
                         <Input
                           placeholder='0'
                           type='number'
+                          step='1'
                           {...field}
                         />
                       </FormControl>

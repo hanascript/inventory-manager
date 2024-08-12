@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
+import { extractRouterConfig } from 'uploadthing/server';
+import { ourFileRouter } from '@/app/api/uploadthing/core';
 
 import { cn } from '@/lib/utils';
 
@@ -27,6 +30,7 @@ export default function RootLayout({
     >
       <head />
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <div className='px-6 md:px-12 mx-auto max-w-7xl'>{children}</div>
       </body>
     </html>
