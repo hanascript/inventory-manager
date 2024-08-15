@@ -26,25 +26,55 @@ enum ProductVariantSize {
   xl
 }
 
-model Product {
-  id          String           @id @default(cuid())
-  name        String
-  description String           @db.Text
-  status      ProductStatus    @default(draft)
-  price       Float
-  variants    ProductVariant[]
-  category    String?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+enum OrderStatus {
+  pending
+  processing
+  shipped
+  delivered
+  canceled
 }
 
-model ProductVariant {
-  id        String             @id @default(cuid())
-  stock     Int
-  color     String
-  size      ProductVariantSize @default(s)
-  product   Product            @relation(fields: [productId], references: [id])
-  productId String
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  description String        @db.Text
+  status      ProductStatus @default(draft)
+  price       Float
+  // variants    ProductVariant[]
+  // orders      Order[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
+
+// model ProductVariant {
+//   id        String             @id @default(cuid())
+//   stock     Int
+//   color     String
+//   size      ProductVariantSize @default(s)
+//   product   Product            @relation(fields: [productId], references: [id])
+//   productId String
+//   createdAt DateTime           @default(now())
+//   updatedAt DateTime           @updatedAt
+// }
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  address   String
+  phone     String?
+  // orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model Order {
+//   id         String      @id @default(cuid())
+//   customer   Customer    @relation(fields: [customerId], references: [id])
+//   customerId String
+//   products   Product[]
+//   quantity   Int
+//   status     OrderStatus @default(pending)
+//   createdAt  DateTime    @default(now())
+//   updatedAt  DateTime    @updatedAt
+// }

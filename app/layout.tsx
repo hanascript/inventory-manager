@@ -5,6 +5,7 @@ import { extractRouterConfig } from 'uploadthing/server';
 import { ourFileRouter } from '@/app/api/uploadthing/core';
 
 import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/sonner';
 
 import './globals.css';
 
@@ -31,7 +32,8 @@ export default function RootLayout({
       <head />
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <div className='px-6 md:px-12 mx-auto max-w-7xl'>{children}</div>
+        <Toaster richColors />
+        <div className='mx-auto max-w-7xl'>{children}</div>
       </body>
     </html>
   );

@@ -15,7 +15,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, PlusCircle } from 'lucide-react';
+import Link from 'next/link';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,7 +42,19 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your Products</CardTitle>
+        <CardTitle className='flex items-center justify-between'>
+          <div>Your Products</div>
+          <Button
+            size='sm'
+            className='h-8 gap-1 ml-auto'
+            asChild
+          >
+            <Link href='/products/new'>
+              <PlusCircle className='size-4' />
+              <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>Add Product</span>
+            </Link>
+          </Button>
+        </CardTitle>
         <CardDescription>Update, delete and edit your products</CardDescription>
       </CardHeader>
       <CardContent>

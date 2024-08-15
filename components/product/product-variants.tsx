@@ -1,7 +1,7 @@
 'use client';
 
 import { z } from 'zod';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Trash } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { productSchema } from '@/schemas';
@@ -23,7 +23,7 @@ export const ProductVariants = () => {
 
   const handleAddVariant = () => {
     append({
-      stock: 25,
+      stock: 0,
       color: '#000000',
       size: 's',
     });
@@ -38,8 +38,8 @@ export const ProductVariants = () => {
         <TableHeader>
           <TableRow>
             <TableHead>Stock</TableHead>
-            <TableHead>Color</TableHead>
-            <TableHead className='w-[100px]'>Size</TableHead>
+            <TableHead className='w-[50px]'>Color</TableHead>
+            <TableHead>Size</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -70,7 +70,6 @@ export const ProductVariants = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        {/* <div className='relative'> */}
                         <Input
                           placeholder='Color value'
                           className='border p-2 rounded-full'
@@ -94,15 +93,26 @@ export const ProductVariants = () => {
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                           variant='outline'
+                          className='mr-auto'
                         >
                           <ToggleGroupItem value='s'>S</ToggleGroupItem>
                           <ToggleGroupItem value='m'>M</ToggleGroupItem>
                           <ToggleGroupItem value='l'>L</ToggleGroupItem>
+                          <ToggleGroupItem value='xl'>XL</ToggleGroupItem>
                         </ToggleGroup>
                       </FormControl>
                     </FormItem>
                   )}
                 />
+              </TableCell>
+              <TableCell>
+                <Button
+                  size='icon'
+                  type='button'
+                  onClick={() => remove(index)}
+                >
+                  <Trash className='size-4' />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
