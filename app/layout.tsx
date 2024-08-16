@@ -32,7 +32,10 @@ export default function RootLayout({
       <head />
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <Toaster richColors />
+        <Toaster
+          visibleToasts={8}
+          closeButton={true}
+        />
         <div className='mx-auto max-w-7xl'>{children}</div>
       </body>
     </html>

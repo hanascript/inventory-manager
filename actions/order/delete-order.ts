@@ -3,9 +3,10 @@
 import db from '@/lib/db';
 import { actionClient } from '@/lib/safe-action';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-export const deleteProduct = actionClient
+export const deleteOrder = actionClient
   .schema(
     z.object({
       id: z.string(),
@@ -13,19 +14,19 @@ export const deleteProduct = actionClient
   )
   .action(async ({ parsedInput: { id } }) => {
     try {
-      await db.product.delete({
+      await db.order.delete({
         where: {
           id,
         },
       });
     } catch (error) {
       return {
-        error: 'Error deleting product',
+        error: 'Error deleting order',
       };
     }
 
-    revalidatePath('/products');
-    return {
-      success: 'Product deleted successfully',
-    };
+    console.log('Deleted Order');
+
+    revalidatePath('/orders');
+    redirect('/orders');
   });

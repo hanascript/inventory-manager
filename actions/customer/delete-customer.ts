@@ -5,7 +5,7 @@ import { actionClient } from '@/lib/safe-action';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-export const deleteProduct = actionClient
+export const deleteCustomer = actionClient
   .schema(
     z.object({
       id: z.string(),
@@ -13,19 +13,19 @@ export const deleteProduct = actionClient
   )
   .action(async ({ parsedInput: { id } }) => {
     try {
-      await db.product.delete({
+      await db.customer.delete({
         where: {
           id,
         },
       });
     } catch (error) {
       return {
-        error: 'Error deleting product',
+        error: 'Error deleting customer',
       };
     }
 
-    revalidatePath('/products');
+    revalidatePath('/customers');
     return {
-      success: 'Product deleted successfully',
+      success: 'Customer deleted successfully',
     };
   });

@@ -48,6 +48,7 @@ export const createProduct = actionClient
       };
     }
 
+    console.log('Created Product')
     revalidatePath('/products');
     return {
       success: 'Product created successfully',
