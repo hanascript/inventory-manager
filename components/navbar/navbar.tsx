@@ -1,4 +1,4 @@
-import { USERLINKS } from '@/constants';
+import { NAVLINKS } from '@/constants';
 
 import { Logo } from './logo';
 import { UserBtn } from './user-btn';
@@ -10,9 +10,9 @@ export const Navbar = () => {
   return (
     <header className='flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6'>
       <div>
-        <nav className='hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6'>
+        <nav className='hidden gap-6 text-lg font-medium md:flex items-center md:gap-5 md:text-sm lg:gap-6'>
           <Logo />
-          {USERLINKS.map(link => (
+          {NAVLINKS.map(link => (
             <NavLink
               key={link.href}
               href={link.href}
@@ -20,7 +20,7 @@ export const Navbar = () => {
             />
           ))}
         </nav>
-        <MobileNavbar links={USERLINKS} />
+        <MobileNavbar links={NAVLINKS} />
       </div>
       <UserBtn />
     </header>

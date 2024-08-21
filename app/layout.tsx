@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
 
 import './globals.css';
+import Component from '@/components/wip2';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -30,13 +31,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head />
-      <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+      <body className={cn('min-h-screen bg-blue-100 font-sans antialiased', fontSans.variable)}>
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Toaster
           visibleToasts={8}
           closeButton={true}
         />
-        <div className='mx-auto max-w-7xl'>{children}</div>
+        <div className='mx-auto max-w-6xl h-full w-full'>{children}</div>
       </body>
     </html>
   );

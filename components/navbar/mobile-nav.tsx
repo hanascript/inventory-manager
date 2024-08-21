@@ -2,16 +2,12 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
 import { Menu } from 'lucide-react';
 import { Logo } from './logo';
-import { NavLink } from './nav-link';
+import { NavItem, NavLink } from './nav-link';
 
-type Props = {
-  links: {
-    href: string;
-    text: string;
-  }[];
-};
+import { NAVLINKS } from '@/constants';
+import { NavigationMenu, NavigationMenuList } from '../ui/navigation-menu';
 
-export const MobileNavbar = ({ links }: Props) => {
+export const MobileNavbar = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -25,16 +21,17 @@ export const MobileNavbar = ({ links }: Props) => {
         </Button>
       </SheetTrigger>
       <SheetContent side='left'>
-        <nav className='grid gap-6 text-lg font-medium'>
-          <Logo />
-          {links.map(link => (
-            <NavLink
-              key={link.href}
-              href={link.href}
-              text={link.text}
-            />
-          ))}
-        </nav>
+        <NavigationMenu>
+          <NavigationMenuList className='grid gap-6 text-lg font-medium mt-8'>
+            {NAVLINKS.map(link => (
+              <NavItem
+                key={link.href}
+                href={link.href}
+                text={link.text}
+              />
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
       </SheetContent>
     </Sheet>
   );
