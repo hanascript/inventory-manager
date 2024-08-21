@@ -1,10 +1,11 @@
-import { Navbar } from '@/components/navbar/navbar';
+import { Navbar } from '@/components/navbar/navbar2';
+import { PageWrapper } from '@/components/page-wrapper';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div className='md:px-2 flex flex-col md:gap-4 h-full'>
       <Navbar />
-      <main className='p-4 md:p-8'>{children}</main>
-    </>
+      <PageWrapper>{children}</PageWrapper>
+    </div>
   );
 }

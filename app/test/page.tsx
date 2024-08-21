@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 export default function TestPage() {
   return (
-    <div className='md:px-2 h-full flex flex-col md:gap-4'>
+    <div className='md:px-2 flex flex-col md:gap-4'>
       <Navbar />
       <PageWrapper>
         <DataTable

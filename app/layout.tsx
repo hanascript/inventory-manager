@@ -37,7 +37,7 @@ export default function RootLayout({
           visibleToasts={8}
           closeButton={true}
         />
-        <div className='mx-auto max-w-6xl h-full w-full'>{children}</div>
+        <div className='mx-auto max-w-6xl md:py-4 h-full'>{children}</div>
       </body>
     </html>
   );

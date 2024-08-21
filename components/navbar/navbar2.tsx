@@ -28,7 +28,7 @@ const LINKS = [
 
 export const Navbar = () => {
   return (
-    <header className='min-h-14 flex items-center justify-between bg-background rounded-none md:rounded-full px-2 md:px-4 md:mt-4 shadow-md border-b md:border-none'>
+    <header className='min-h-14 flex items-center justify-between bg-background rounded-none md:rounded-full px-2 md:px-4 shadow-md border-b md:border-none'>
       <div>
         <DesktopNav />
         <MobileNavbar />

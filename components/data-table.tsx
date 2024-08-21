@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import { ArrowUpDown, ChevronLeft, ChevronRight, ChevronsRight, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 
 import { Button } from '@/components/ui/button';
@@ -237,7 +237,7 @@ export function DataTable<TData, TValue>({ columns, data, filter }: DataTablePro
     <div className='flex flex-col h-full'>
       <div className='flex items-center justify-between px-4 border-b py-2'>
         <Input
-          placeholder={`Filter ${filter}...`}
+          placeholder={`Filter by ${filter}...`}
           value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
           onChange={event => table.getColumn(filter)?.setFilterValue(event.target.value)}
           className='max-w-[265px] h-8'
@@ -297,7 +297,7 @@ export function DataTable<TData, TValue>({ columns, data, filter }: DataTablePro
             disabled={!table.getCanPreviousPage()}
           >
             <span className='sr-only'>Go to first page</span>
-            <ChevronsRight className='h-4 w-4' />
+            <ChevronsLeft className='h-4 w-4' />
           </Button>
           <Button
             variant='outline'

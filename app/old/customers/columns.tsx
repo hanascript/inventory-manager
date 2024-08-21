@@ -10,13 +10,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ArrowUpDown, Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { deleteCustomer } from '@/actions/customer/delete-customer';
-import { Checkbox } from '@/components/ui/checkbox';
 
 type CustomerCollum = {
   id: string;
@@ -30,39 +29,6 @@ type CustomerCollum = {
 
 export const columns: ColumnDef<CustomerCollum>[] = [
   {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={value => row.toggleSelected(!!value)}
-        aria-label='Select row'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'email',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Email
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
-      );
-    },
-  },
-  {
     accessorKey: 'name',
     header: 'Name',
   },
@@ -74,7 +40,10 @@ export const columns: ColumnDef<CustomerCollum>[] = [
     accessorKey: 'phone',
     header: 'Phone',
   },
-
+  {
+    accessorKey: 'email',
+    header: 'Email',
+  },
   {
     id: 'actions',
     cell: ({ row }) => <CellAction id={row.original.id} />,

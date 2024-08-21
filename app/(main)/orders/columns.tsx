@@ -18,18 +18,18 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { deleteProduct } from '@/actions/product/delete-product';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Customer } from '@prisma/client';
 
-type ProductCollum = {
+type OrderCollum = {
   id: string;
-  name: string;
-  description: string;
+  customerId: string;
+  quantity: number;
   status: string;
-  price: number;
   createdAt: Date;
   updatedAt: Date;
-};
+}
 
-export const columns: ColumnDef<ProductCollum>[] = [
+export const columns: ColumnDef<OrderCollum>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -49,10 +49,10 @@ export const columns: ColumnDef<ProductCollum>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  // {
-  //   accessorKey: 'name',
-  //   header: 'Name',
-  // },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+  },
   {
     accessorKey: 'name',
     header: 'Name',
