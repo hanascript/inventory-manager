@@ -22,9 +22,7 @@ export const createProduct = actionClient
           },
         });
       } catch (error) {
-        return {
-          error: 'Error updating product',
-        };
+        throw new Error('Error updating product');
       }
 
       revalidatePath('/products');
@@ -43,13 +41,11 @@ export const createProduct = actionClient
         },
       });
     } catch (error) {
-      return {
-        error: 'Error creating product',
-      };
+      throw new Error('Error creating product');
     }
 
-    console.log('Created Product')
     revalidatePath('/products');
+
     return {
       success: 'Product created successfully',
     };

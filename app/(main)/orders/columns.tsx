@@ -22,12 +22,13 @@ import { Customer } from '@prisma/client';
 
 type OrderCollum = {
   id: string;
-  customerId: string;
-  quantity: number;
+  customer: string;
+  email: string;
   status: string;
+  quantity: number;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 export const columns: ColumnDef<OrderCollum>[] = [
   {
@@ -50,12 +51,16 @@ export const columns: ColumnDef<OrderCollum>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'name',
-    header: 'Name',
+    accessorKey: 'customer',
+    header: 'Customer',
   },
   {
-    accessorKey: 'name',
-    header: 'Name',
+    accessorKey: 'email',
+    header: 'Email',
+  },
+  {
+    accessorKey: 'quantity',
+    header: 'Quantity',
   },
   {
     accessorKey: 'status',
@@ -63,19 +68,6 @@ export const columns: ColumnDef<OrderCollum>[] = [
     cell: ({ row }) => (
       <Badge variant={row.original.status === 'draft' ? 'outline' : 'default'}>{row.original.status}</Badge>
     ),
-  },
-  {
-    accessorKey: 'price',
-    header: () => <div className='text-right'>Price</div>,
-    cell: ({ row }) => {
-      const price = parseFloat(row.getValue('price'));
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(price);
-
-      return <div className='text-right font-medium'>{formatted}</div>;
-    },
   },
   {
     id: 'actions',

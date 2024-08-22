@@ -14,6 +14,7 @@ export default async function CustomersPage() {
 
   return (
     <DataTable
+      ctx='customer'
       filter='email'
       columns={columns}
       data={customers}

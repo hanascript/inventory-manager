@@ -19,12 +19,10 @@ export const deleteProduct = actionClient
         },
       });
     } catch (error) {
-      return {
-        error: 'Error deleting product',
-      };
+      throw new Error('Error deleting product');
     }
 
-    revalidatePath('/products');
+    // revalidatePath('/products');
     return {
       success: 'Product deleted successfully',
     };

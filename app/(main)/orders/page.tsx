@@ -11,11 +11,24 @@ export default async function OrdersPage() {
 
   if (!orders) throw new Error('No orders found');
 
+  const flattenedOrders = orders.map(order => {
+    return {
+      id: order.id,
+      customer: order.customer.name,
+      email: order.customer.email,
+      status: order.status,
+      quantity: order.quantity,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+    };
+  });
+
   return (
     <DataTable
-      filter='email'
+      ctx='order'
+      filter='customer'
       columns={columns}
-      data={orders}
+      data={flattenedOrders}
     />
   );
 }

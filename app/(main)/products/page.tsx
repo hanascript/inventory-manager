@@ -14,6 +14,7 @@ export default async function ProductsPage() {
 
   return (
     <DataTable
+      ctx='product'
       filter='name'
       columns={columns}
       data={products}
