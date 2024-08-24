@@ -16,8 +16,8 @@ export default async function OrdersPage() {
       id: order.id,
       customer: order.customer.name,
       email: order.customer.email,
-      status: order.status,
-      quantity: order.quantity,
+      paid: order.isPaid,
+      delivered: order.isDelivered,
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
     };

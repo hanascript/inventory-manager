@@ -42,30 +42,19 @@ model Product {
   name        String
   description String        @db.Text
   status      ProductStatus @default(draft)
-  price       Decimal
+  price       Float
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  OrderItem   OrderItem[]
+  orders      Order[]
 }
 
 model Order {
-  id          String      @id @default(cuid())
-  customer    Customer    @relation(fields: [customerId], references: [id])
+  id          String    @id @default(cuid())
+  customer    Customer  @relation(fields: [customerId], references: [id])
   customerId  String
-  OrderItem   OrderItem[]
-  isPaid      Boolean     @default(false)
-  isDelivered Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-}
-
-model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String // Foreign Key to Order
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
-
-  @@index([orderId])
-  @@index([productId])
+  products    Product[]
+  isPaid      Boolean   @default(false)
+  isDelivered Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

@@ -16,7 +16,7 @@ export const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   // Capitalize the first letter of the main segment
   const formattedPathname = pathname.split('/')[1].charAt(0).toUpperCase() + pathname.split('/')[1].slice(1);
 
-  const isIncluded = NAVLINKS.some(link => link.href === pathname) && pathname !== '/' && pathname !== '/analytics';
+  const isIncluded = NAVLINKS.some(link => link.href === pathname) && pathname !== '/';
 
   return (
     <Card className='flex-1 border-none rounded-none md:rounded-2xl shadow-md flex flex-col'>

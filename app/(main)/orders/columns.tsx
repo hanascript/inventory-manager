@@ -24,8 +24,8 @@ type OrderCollum = {
   id: string;
   customer: string;
   email: string;
-  status: string;
-  quantity: number;
+  paid: boolean;
+  delivered: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -59,14 +59,17 @@ export const columns: ColumnDef<OrderCollum>[] = [
     header: 'Email',
   },
   {
-    accessorKey: 'quantity',
-    header: 'Quantity',
+    accessorKey: 'paid',
+    header: 'Paid',
+    cell: ({ row }) => (
+      <Badge variant={row.original.paid ? 'outline' : 'default'}>{row.original.paid ? 'Yes' : 'No'}</Badge>
+    ),
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: 'delivered',
+    header: 'Delivered',
     cell: ({ row }) => (
-      <Badge variant={row.original.status === 'draft' ? 'outline' : 'default'}>{row.original.status}</Badge>
+      <Badge variant={row.original.delivered ? 'outline' : 'default'}>{row.original.delivered ? 'Yes' : 'No'}</Badge>
     ),
   },
   {

@@ -18,6 +18,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { deleteProduct } from '@/actions/product/delete-product';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Decimal } from '@prisma/client/runtime/library';
 
 type ProductCollum = {
   id: string;
