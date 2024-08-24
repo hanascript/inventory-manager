@@ -38,21 +38,16 @@ export const OrderProducts = ({ cart, products }: Props) => {
   };
 
   return (
-    <CardWrapper
-      title='Variants'
-      description='Edit your product variants'
-    >
-      <div className='grid grid-cols-3 gap-4 max-h-[500px]'>
-        {products.map(product => (
-          <div
-            key={product.id}
-            className={cn('border p-4 rounded-md hover:cursor-pointer', isProductSelected(product) && 'bg-blue-400')}
-            onClick={() => handleClick(product)}
-          >
-            {product.name}
-          </div>
-        ))}
-      </div>
-    </CardWrapper>
+    <div className='grid grid-cols-3 gap-4 max-h-[500px]'>
+      {products.map(product => (
+        <div
+          key={product.id}
+          className={cn('border p-4 rounded-md hover:cursor-pointer', isProductSelected(product) && 'bg-blue-400')}
+          onClick={() => handleClick(product)}
+        >
+          {product.name}
+        </div>
+      ))}
+    </div>
   );
 };

@@ -49,9 +49,6 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
     execute(data);
   };
 
-  console.log('hasSucceeded', hasSucceeded);
-  console.log('hasErrored', hasErrored);
-
   return (
     <Form {...form}>
       <form
