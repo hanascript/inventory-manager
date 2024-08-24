@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/navbar/navbar2';
+import { Navbar } from '@/components/navbar/navbar';
 import { PageWrapper } from '@/components/page-wrapper';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

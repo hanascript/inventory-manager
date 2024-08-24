@@ -12,7 +12,7 @@ import {
 
 import { NAVLINKS } from '@/constants';
 import Link from 'next/link';
-import { NavItem } from './nav-link';
+import { NavItem } from './nav-item';
 
 export const DesktopNav = () => {
   return (

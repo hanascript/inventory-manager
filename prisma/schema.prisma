@@ -26,15 +26,6 @@ enum ProductVariantSize {
   xl
 }
 
-enum OrderStatus {
-  pending
-  declined
-  processing
-  shipped
-  delivered
-  canceled
-}
-
 model Customer {
   id        String   @id @default(cuid())
   name      String
@@ -51,31 +42,30 @@ model Product {
   name        String
   description String        @db.Text
   status      ProductStatus @default(draft)
-  price       Float
-  // variants    ProductVariant[]
-  orders      Order[]
+  price       Decimal
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+  OrderItem   OrderItem[]
 }
 
-// model ProductVariant {
-//   id        String             @id @default(cuid())
-//   stock     Int
-//   color     String
-//   size      ProductVariantSize @default(s)
-//   product   Product            @relation(fields: [productId], references: [id])
-//   productId String
-//   createdAt DateTime           @default(now())
-//   updatedAt DateTime           @updatedAt
-// }
-
 model Order {
-  id         String      @id @default(cuid())
-  customer   Customer    @relation(fields: [customerId], references: [id])
-  customerId String
-  products   Product[]
-  quantity   Int
-  status     OrderStatus @default(pending)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id          String      @id @default(cuid())
+  customer    Customer    @relation(fields: [customerId], references: [id])
+  customerId  String
+  OrderItem   OrderItem[]
+  isPaid      Boolean     @default(false)
+  isDelivered Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String // Foreign Key to Order
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String // Foreign Key to Product
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
 }

@@ -17,17 +17,6 @@ type Props = {
   text: string;
 };
 
-export const NavLink = ({ href, text }: Props) => {
-  return (
-    <Link
-      href={href}
-      className='text-foreground transition-colors hover:text-foreground'
-    >
-      {text}
-    </Link>
-  );
-};
-
 export const NavItem = ({ href, text }: Props) => {
   return (
     <NavigationMenuItem>
