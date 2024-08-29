@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Product } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useAction } from 'next-safe-action/hooks';
-import { DollarSign } from 'lucide-react';
+import { DollarSign, HashIcon } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { productSchema } from '@/schemas';
@@ -15,8 +15,9 @@ import { createProduct } from '@/actions/product/create-product';
 import { Input } from '@/components/ui/input';
 import { Tiptap } from '@/components/tiptap';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 type Props = {
   initialData?: Product | null;
@@ -28,20 +29,24 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: initialData || {
+      id: 'new',
       name: '',
       description: '',
-      status: 'draft',
-      price: 0.0,
+      price: 0,
+      stock: 0,
+      isActive: false,
+      isArchived: false,
     },
   });
 
-  const { execute, isPending, hasSucceeded, hasErrored } = useAction(createProduct, {
+  const { execute, isPending } = useAction(createProduct, {
     onSuccess: ({ data }) => {
-      toast.success(data?.success);
+      console.log(data);
+      toast.success('success');
       router.push('/products');
     },
     onError: () => {
-      toast.error('Error creating product');
+      toast.error('An error has occurred.');
     },
   });
 
@@ -61,10 +66,11 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Product Name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
                   placeholder='Saekdong Stripe'
+                  disabled={isPending}
                   {...field}
                 />
               </FormControl>
@@ -72,31 +78,59 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='price'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Price</FormLabel>
-              <FormControl>
-                <div className='flex items-center gap-2'>
-                  <DollarSign
-                    size={36}
-                    className='p-2 bg-muted  rounded-md'
-                  />
-                  <Input
-                    {...field}
-                    type='currency'
-                    placeholder='Your price in USD'
-                    step='0.1'
-                    min={0}
-                  />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='flex items-center justify-between gap-4'>
+          <FormField
+            control={form.control}
+            name='price'
+            render={({ field }) => (
+              <FormItem className='w-full'>
+                <FormLabel>Price</FormLabel>
+                <FormControl>
+                  <div className='flex items-center gap-2'>
+                    <DollarSign
+                      size={36}
+                      className='p-2 bg-muted  rounded-md'
+                    />
+                    <Input
+                      {...field}
+                      type='currency'
+                      placeholder='Your price in USD'
+                      disabled={isPending}
+                      step='0.1'
+                      min={0}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='stock'
+            render={({ field }) => (
+              <FormItem className='w-full'>
+                <FormLabel>Stock</FormLabel>
+                <FormControl>
+                  <div className='flex items-center gap-2'>
+                    <HashIcon
+                      size={36}
+                      className='p-2 bg-muted  rounded-md'
+                    />
+                    <Input
+                      placeholder='0'
+                      type='number'
+                      step={1}
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name='description'
@@ -104,38 +138,56 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Tiptap value={field.value} />
+                <Tiptap
+                  value={field.value}
+                  disabled={isPending}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='status'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Status</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                disabled={isPending}
-              >
+
+        <div className='flex flex-col md:flex-row items-center justify-between gap-4'>
+          <FormField
+            control={form.control}
+            name='isActive'
+            render={({ field }) => (
+              <FormItem className='flex items-start space-x-3 space-y-0 rounded-md border p-4 w-full'>
                 <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder='Select status' />
-                  </SelectTrigger>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={isPending}
+                  />
                 </FormControl>
-                <SelectContent>
-                  <SelectItem value='draft'>Draft</SelectItem>
-                  <SelectItem value='active'>Active</SelectItem>
-                  <SelectItem value='archived'>Archived</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <div className='space-y-1 leading-none'>
+                  <FormLabel>Is Active</FormLabel>
+                  <FormDescription>Setting this product as active will make it visible in the store.</FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='isArchived'
+            render={({ field }) => (
+              <FormItem className='flex items-start space-x-3 space-y-0 rounded-md border p-4 w-full'>
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    disabled={isPending}
+                  />
+                </FormControl>
+                <div className='space-y-1 leading-none'>
+                  <FormLabel>Is Archived</FormLabel>
+                  <FormDescription>Archive this product. It will no longer be visible in the store.</FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
         <Button className='w-full'>Submit</Button>
       </form>
     </Form>

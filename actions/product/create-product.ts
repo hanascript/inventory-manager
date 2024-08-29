@@ -7,9 +7,20 @@ import { revalidatePath } from 'next/cache';
 
 export const createProduct = actionClient
   .schema(productSchema)
-  .action(async ({ parsedInput: { id, name, description, status, price } }) => {
-    if (id) {
-      try {
+  .action(async ({ parsedInput: { id, name, description, stock, price, isActive, isArchived } }) => {
+    try {
+      if (id === 'new') {
+        await db.product.create({
+          data: {
+            name,
+            price,
+            description,
+            stock,
+            isActive,
+            isArchived,
+          },
+        });
+      } else {
         await db.product.update({
           where: {
             id,
@@ -18,28 +29,12 @@ export const createProduct = actionClient
             name,
             price,
             description,
-            status,
+            stock,
+            isActive,
+            isArchived,
           },
         });
-      } catch (error) {
-        throw new Error('Error updating product');
       }
-
-      revalidatePath('/products');
-      return {
-        success: 'Product updated successfully',
-      };
-    }
-
-    try {
-      await db.product.create({
-        data: {
-          name,
-          price,
-          description,
-          status,
-        },
-      });
     } catch (error) {
       throw new Error('Error creating product');
     }
@@ -47,6 +42,6 @@ export const createProduct = actionClient
     revalidatePath('/products');
 
     return {
-      success: 'Product created successfully',
+      success: 'Product updated successfully.',
     };
   });

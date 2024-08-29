@@ -22,7 +22,7 @@ export const deleteProduct = actionClient
       throw new Error('Error deleting product');
     }
 
-    // revalidatePath('/products');
+    revalidatePath('/products');
     return {
       success: 'Product deleted successfully',
     };

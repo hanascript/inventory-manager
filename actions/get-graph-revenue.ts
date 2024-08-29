@@ -3,7 +3,7 @@
 import db from '@/lib/db';
 
 type GraphData = {
-  name: string;
+  month: string;
   total: number;
 };
 
@@ -13,7 +13,11 @@ export const getGraphRevenue = async (): Promise<GraphData[]> => {
       isPaid: true,
     },
     include: {
-      products: true,
+      OrderItem: {
+        include: {
+          product: true,
+        },
+      },
     },
   });
 
@@ -24,8 +28,8 @@ export const getGraphRevenue = async (): Promise<GraphData[]> => {
     const month = order.createdAt.getMonth(); // 0 for Jan, 1 for Feb, ...
     let revenueForOrder = 0;
 
-    for (const product of order.products) {
-      revenueForOrder += product.price;
+    for (const product of order.OrderItem) {
+      revenueForOrder = revenueForOrder + product.product.price * product.quantity;
     }
 
     // Adding the revenue for this order to the respective month
@@ -34,18 +38,18 @@ export const getGraphRevenue = async (): Promise<GraphData[]> => {
 
   // Converting the grouped data into the format expected by the graph
   const graphData: GraphData[] = [
-    { name: 'Jan', total: 0 },
-    { name: 'Feb', total: 0 },
-    { name: 'Mar', total: 0 },
-    { name: 'Apr', total: 0 },
-    { name: 'May', total: 0 },
-    { name: 'Jun', total: 0 },
-    { name: 'Jul', total: 0 },
-    { name: 'Aug', total: 0 },
-    { name: 'Sep', total: 0 },
-    { name: 'Oct', total: 0 },
-    { name: 'Nov', total: 0 },
-    { name: 'Dec', total: 0 },
+    { month: 'Jan', total: 0 },
+    { month: 'Feb', total: 0 },
+    { month: 'Mar', total: 0 },
+    { month: 'Apr', total: 0 },
+    { month: 'May', total: 0 },
+    { month: 'Jun', total: 0 },
+    { month: 'Jul', total: 0 },
+    { month: 'Aug', total: 0 },
+    { month: 'Sep', total: 0 },
+    { month: 'Oct', total: 0 },
+    { month: 'Nov', total: 0 },
+    { month: 'Dec', total: 0 },
   ];
 
   // Filling in the revenue data

@@ -8,8 +8,17 @@ import { revalidatePath } from 'next/cache';
 export const createCustomer = actionClient
   .schema(customerSchema)
   .action(async ({ parsedInput: { id, name, address, email, phone } }) => {
-    if (id) {
-      try {
+    try {
+      if (id === 'new') {
+        await db.customer.create({
+          data: {
+            name,
+            address,
+            email,
+            phone,
+          },
+        });
+      } else {
         await db.customer.update({
           where: {
             id,
@@ -21,36 +30,13 @@ export const createCustomer = actionClient
             phone,
           },
         });
-      } catch (error) {
-        return {
-          error: 'Error updating customer',
-        };
       }
-
-      revalidatePath('/customers');
-      return {
-        success: 'Customer updated successfully',
-      };
-    }
-
-    try {
-      await db.customer.create({
-        data: {
-          name,
-          address,
-          email,
-          phone,
-        },
-      });
     } catch (error) {
-      return {
-        error: 'Error creating customer',
-      };
+      throw new Error('An error occurred.');
     }
 
-    console.log('Create Customer')
     revalidatePath('/customers');
     return {
-      success: 'Customer created successfully',
+      success: 'Customers updated successfully',
     };
   });

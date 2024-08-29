@@ -13,12 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ProductStatus {
-  draft
-  active
-  archived
-}
-
 enum ProductVariantSize {
   s
   m
@@ -31,30 +25,43 @@ model Customer {
   name      String
   email     String   @unique
   address   String
-  phone     String?
+  phone     String
   orders    Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Product {
-  id          String        @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
-  description String        @db.Text
-  status      ProductStatus @default(draft)
+  description String      @db.Text
   price       Float
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  orders      Order[]
+  stock       Int         @default(0)
+  isActive    Boolean     @default(false)
+  isArchived  Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  OrderItem   OrderItem[]
 }
 
 model Order {
-  id          String    @id @default(cuid())
-  customer    Customer  @relation(fields: [customerId], references: [id])
+  id          String      @id @default(cuid())
+  customer    Customer    @relation(fields: [customerId], references: [id])
   customerId  String
-  products    Product[]
-  isPaid      Boolean   @default(false)
-  isDelivered Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  isPaid      Boolean     @default(false)
+  isDelivered Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  OrderItem   OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -8,57 +8,85 @@ import { Order } from '@prisma/client';
 
 export const createOrder = actionClient
   .schema(orderSchema)
-  .action(async ({ parsedInput: { id, customerId, products, quantity, status } }) => {
-    if (id) {
-      try {
+  .action(async ({ parsedInput: { id, customerId, isDelivered, isPaid, products } }) => {
+    try {
+      if (id === 'new') {
+        await db.order.create({
+          data: {
+            customerId,
+            isDelivered,
+            isPaid,
+            OrderItem: {
+              create: products.map(product => ({
+                productId: product.productId,
+                quantity: product.quantity,
+              })),
+            },
+          },
+        });
+
+        // Update product stocks
+        await Promise.all(
+          products.map(product =>
+            db.product.update({
+              where: {
+                id: product.productId,
+              },
+              data: {
+                stock: {
+                  decrement: product.quantity,
+                },
+              },
+            })
+          )
+        );
+      } else {
+        await db.orderItem.deleteMany({
+          where: {
+            orderId: id,
+          },
+        });
+
         await db.order.update({
           where: {
             id,
           },
           data: {
             customerId,
-            quantity,
-            status,
-            products: {
-              set: products.map(product => ({ id: product.id })),
+            isDelivered,
+            isPaid,
+            OrderItem: {
+              create: products.map(product => ({
+                productId: product.productId,
+                quantity: product.quantity,
+              })),
             },
           },
         });
-      } catch (error) {
-        console.log(error);
-        return {
-          error: 'Error updating order',
-        };
+
+        // Update product stocks
+        await Promise.all(
+          products.map(product =>
+            db.product.update({
+              where: {
+                id: product.productId,
+              },
+              data: {
+                stock: {
+                  decrement: product.quantity,
+                },
+              },
+            })
+          )
+        );
       }
-
-      console.log('Revalidating');
-      revalidatePath('/orders');
-      return {
-        success: 'Order updated successfully',
-      };
-    }
-
-    try {
-      await db.order.create({
-        data: {
-          customerId,
-          quantity,
-          status,
-          products: {
-            connect: products.map(product => ({ id: product.id })),
-          },
-        },
-      });
     } catch (error) {
-      console.log(error);
-      return {
-        error: 'Error creating order',
-      };
+      throw new Error('An error occurred.');
     }
 
-    console.log('Revalidating');
     revalidatePath('/orders');
+
     return {
-      success: 'Order created successfully',
+      success: 'Order updated successfully.',
     };
   });

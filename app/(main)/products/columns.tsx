@@ -24,8 +24,10 @@ type ProductCollum = {
   id: string;
   name: string;
   description: string;
-  status: string;
+  stock: number;
   price: number;
+  isActive: boolean;
+  isArchived: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -50,20 +52,13 @@ export const columns: ColumnDef<ProductCollum>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  // {
-  //   accessorKey: 'name',
-  //   header: 'Name',
-  // },
   {
     accessorKey: 'name',
     header: 'Name',
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => (
-      <Badge variant={row.original.status === 'draft' ? 'outline' : 'default'}>{row.original.status}</Badge>
-    ),
+    accessorKey: 'stock',
+    header: 'Stock',
   },
   {
     accessorKey: 'price',
@@ -77,6 +72,20 @@ export const columns: ColumnDef<ProductCollum>[] = [
 
       return <div className='text-right font-medium'>{formatted}</div>;
     },
+  },
+  {
+    accessorKey: 'isActive',
+    header: 'Active',
+    cell: ({ row }) => (
+      <Badge variant={row.original.isActive ? 'outline' : 'default'}>{row.original.isActive ? 'Yes' : 'No'}</Badge>
+    ),
+  },
+  {
+    accessorKey: 'isArchived',
+    header: 'Archived',
+    cell: ({ row }) => (
+      <Badge variant={row.original.isArchived ? 'outline' : 'default'}>{row.original.isArchived ? 'Yes' : 'No'}</Badge>
+    ),
   },
   {
     id: 'actions',

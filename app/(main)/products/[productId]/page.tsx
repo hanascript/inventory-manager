@@ -12,8 +12,8 @@ export default async function ProductFormPage({ params }: { params: { productId:
   const product = await db.product.findUnique({
     where: {
       id: params.productId,
-    }
-  })
+    },
+  });
 
   return <ProductForm initialData={product} />;
 }

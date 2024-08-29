@@ -11,11 +11,10 @@ import { orderSchema } from '@/schemas';
 import { CardWrapper } from '@/components/card-wrapper';
 
 type Props = {
-  cart: Product[];
   products: Product[];
 };
 
-export const OrderProducts = ({ cart, products }: Props) => {
+export const OrderProducts = ({ products }: Props) => {
   const { setValue } = useFormContext<z.infer<typeof orderSchema>>();
 
   const [selectedProducts, setSelectedProducts] = useState<Product[]>(cart);

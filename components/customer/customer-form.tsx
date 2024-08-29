@@ -29,13 +29,15 @@ type Props = {
 export const CustomerForm: React.FC<Props> = ({ initialData }) => {
   const router = useRouter();
 
-  const defaultValues = initialData
-    ? { ...initialData, phone: initialData?.phone || undefined }
-    : { name: '', email: '', address: '', phone: undefined };
-
   const form = useForm<z.infer<typeof customerSchema>>({
     resolver: zodResolver(customerSchema),
-    defaultValues,
+    defaultValues: initialData || {
+      id: 'new',
+      name: '',
+      email: '',
+      address: '',
+      phone: '',
+    },
   });
 
   const { execute, isPending } = useAction(createCustomer, {

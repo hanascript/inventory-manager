@@ -8,15 +8,10 @@ import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Placeholder } from '@tiptap/extension-placeholder';
 
-export const Tiptap = ({ value }: { value: string }) => {
+export const Tiptap = ({ value, disabled }: { value: string; disabled: boolean }) => {
   const { setValue } = useFormContext();
   const editor = useEditor({
     extensions: [
-      Placeholder.configure({
-        placeholder: 'Add a description for your product',
-        emptyNodeClass:
-          'first:before:text-gray-600 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
-      }),
       StarterKit.configure({
         orderedList: {
           HTMLAttributes: {
@@ -103,6 +98,7 @@ export const Tiptap = ({ value }: { value: string }) => {
       <EditorContent
         placeholder='Product Description'
         editor={editor}
+        disabled={disabled}
       />
     </div>
   );
