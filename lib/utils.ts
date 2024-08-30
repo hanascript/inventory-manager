@@ -11,3 +11,10 @@ export const createUrl = (pathname: string, params: URLSearchParams) => {
 
   return `${pathname}${queryString}`;
 };
+
+export const formatToUSD = (amount: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
+};

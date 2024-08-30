@@ -1,6 +1,7 @@
 'use server';
 
 import db from '@/lib/db';
+import { formatToUSD } from '@/lib/utils';
 
 export const getTotalRevenue = async () => {
   const paidOrders = await db.order.findMany({
@@ -21,5 +22,7 @@ export const getTotalRevenue = async () => {
     return total + itemTotal;
   }, 0);
 
-  return totalRevenue;
+  const formattedTotalRevenue = formatToUSD(totalRevenue)
+
+  return formattedTotalRevenue;
 };

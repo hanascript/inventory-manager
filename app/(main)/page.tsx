@@ -1,24 +1,20 @@
-import {
-  DollarSign,
-  Package,
-  ShoppingBag
-} from 'lucide-react';
+import { DollarSign, Package, ShoppingBag } from 'lucide-react';
 
+import { getGraphRevenue } from '@/actions/get-graph-revenue';
 import { getRecentOrders } from '@/actions/get-recent-orders';
 import { getSalesCount } from '@/actions/get-sales-count';
 import { getStockCount } from '@/actions/get-stock-count';
-import { getGraphRevenue } from '@/actions/get-graph-revenue';
 
-
+import { getTotalRevenue } from '@/actions/get-total-revenue';
 import { Analytics } from '@/components/analytics';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function Home() {
   const graphData = await getGraphRevenue();
 
+  const totalRevenue = await getTotalRevenue();
   const stockCount = await getStockCount();
   const salesCount = await getSalesCount();
-
   const recentOrders = await getRecentOrders();
 
   return (
@@ -30,7 +26,7 @@ export default async function Home() {
             <DollarSign className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>$45,231.89</div>
+            <div className='text-2xl font-bold'>{totalRevenue}</div>
             <p className='text-xs text-muted-foreground'>Orders marked as paid</p>
           </CardContent>
         </Card>
