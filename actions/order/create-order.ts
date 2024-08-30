@@ -8,7 +8,7 @@ import { orderSchema } from '@/schemas';
 
 export const createOrder = actionClient
   .schema(orderSchema)
-  .action(async ({ parsedInput: { id, customerId, isDelivered, isPaid, products } }) => {
+  .action(async ({ parsedInput: { id, customerId, isDelivered, isPaid, OrderItem: products } }) => {
     try {
       if (id === 'new') {
         await db.order.create({
