@@ -1,9 +1,10 @@
 'use server';
 
-import db from '@/lib/db';
-import { actionClient } from '@/lib/safe-action';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+
+import db from '@/lib/db';
+import { actionClient } from '@/lib/safe-action';
 
 export const deleteCustomer = actionClient
   .schema(

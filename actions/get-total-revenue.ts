@@ -21,12 +21,5 @@ export const getTotalRevenue = async () => {
     return total + itemTotal;
   }, 0);
 
-  // const totalRevenue = paidOrders.reduce((total, order) => {
-  //   const orderTotal = order.OrderItem.products.reduce((orderSum, product) => {
-  //     return orderSum + product.price;
-  //   }, 0);
-  //   return total + orderTotal;
-  // }, 0);
-
   return totalRevenue;
 };

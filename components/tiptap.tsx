@@ -1,12 +1,12 @@
 'use client';
 
-import { Toggle } from '@/components/ui/toggle';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { BoldIcon, ItalicIcon, ListIcon, ListOrderedIcon, StrikethroughIcon } from 'lucide-react';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Placeholder } from '@tiptap/extension-placeholder';
+
+import { Toggle } from '@/components/ui/toggle';
 
 export const Tiptap = ({ value, disabled }: { value: string; disabled: boolean }) => {
   const { setValue } = useFormContext();

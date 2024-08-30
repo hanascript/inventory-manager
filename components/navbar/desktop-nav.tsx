@@ -1,17 +1,10 @@
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-  NavigationMenuViewport,
+  NavigationMenuList
 } from '@/components/ui/navigation-menu';
 
 import { NAVLINKS } from '@/constants';
-import Link from 'next/link';
+
 import { NavItem } from './nav-item';
 
 export const DesktopNav = () => {

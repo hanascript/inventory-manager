@@ -1,11 +1,12 @@
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Button } from '../ui/button';
 import { Menu } from 'lucide-react';
-import { Logo } from './logo';
-import { NavItem } from './nav-item';
 
 import { NAVLINKS } from '@/constants';
-import { NavigationMenu, NavigationMenuList } from '../ui/navigation-menu';
+
+import { Button } from '@/components/ui/button';
+import { NavigationMenu, NavigationMenuList } from '@/components/ui/navigation-menu';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+
+import { NavItem } from './nav-item';
 
 export const MobileNavbar = () => {
   return (

@@ -1,8 +1,16 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
+import { deleteProduct } from '@/actions/product/delete-product';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,14 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
-import { deleteProduct } from '@/actions/product/delete-product';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Customer } from '@prisma/client';
+
 
 type OrderCollum = {
   id: string;

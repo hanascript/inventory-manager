@@ -1,9 +1,10 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import db from '@/lib/db';
 import { actionClient } from '@/lib/safe-action';
 import { customerSchema } from '@/schemas';
-import { revalidatePath } from 'next/cache';
 
 export const createCustomer = actionClient
   .schema(customerSchema)

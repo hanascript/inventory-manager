@@ -1,8 +1,15 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown, Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
+import { deleteCustomer } from '@/actions/customer/delete-customer';
+
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,13 +17,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ArrowUpDown, Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
-import { deleteCustomer } from '@/actions/customer/delete-customer';
-import { Checkbox } from '@/components/ui/checkbox';
 
 type CustomerCollum = {
   id: string;

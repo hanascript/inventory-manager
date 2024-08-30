@@ -1,23 +1,22 @@
 'use client';
 
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
-import { Product } from '@prisma/client';
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
-import { DollarSign, HashIcon } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Product } from '@prisma/client';
+import { DollarSign, HashIcon } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
-import { productSchema } from '@/schemas';
 import { createProduct } from '@/actions/product/create-product';
+import { productSchema } from '@/schemas';
 
-import { Input } from '@/components/ui/input';
 import { Tiptap } from '@/components/tiptap';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
 type Props = {
   initialData?: Product | null;

@@ -1,6 +1,7 @@
+import { redirect } from 'next/navigation';
+
 import { CustomerForm } from '@/components/customer/customer-form';
 import db from '@/lib/db';
-import { redirect } from 'next/navigation';
 
 export default async function CustomerFormPage({ params }: { params: { customerId: string } }) {
   if (!params.customerId) redirect('/customers');

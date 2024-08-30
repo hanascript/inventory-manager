@@ -1,11 +1,11 @@
+import { ourFileRouter } from '@/app/api/uploadthing/core';
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
-import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { extractRouterConfig } from 'uploadthing/server';
-import { ourFileRouter } from '@/app/api/uploadthing/core';
 
-import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
+import { cn } from '@/lib/utils';
 
 import './globals.css';
 

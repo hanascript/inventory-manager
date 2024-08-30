@@ -1,6 +1,7 @@
+import { redirect } from 'next/navigation';
+
 import { ProductForm } from '@/components/product/product-form';
 import db from '@/lib/db';
-import { redirect } from 'next/navigation';
 
 export default async function ProductFormPage({ params }: { params: { productId: string } }) {
   if (!params.productId) redirect('/products');

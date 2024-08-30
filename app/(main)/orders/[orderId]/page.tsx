@@ -1,5 +1,4 @@
 import { OrderForm } from '@/components/order/order-form';
-import { ProductForm } from '@/components/product/product-form';
 import db from '@/lib/db';
 import { redirect } from 'next/navigation';
 
@@ -23,19 +22,20 @@ export default async function OrdersFormPage({ params }: { params: { orderId: st
     );
   }
 
-  // const order = await db.order.findUnique({
-  //   where: {
-  //     id: params.orderId,
-  //   },
-  //   include: {
-  //     products: true,
-  //   },
-  // });
+  const order = await db.order.findUnique({
+    where: {
+      id: params.orderId,
+    },
+    include: {
+      OrderItem: true,
+    },
+  });
 
   return (
     <OrderForm
       customers={customers}
       products={products}
+      initialData={order}
     />
   );
 }

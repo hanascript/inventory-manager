@@ -1,10 +1,10 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import db from '@/lib/db';
 import { actionClient } from '@/lib/safe-action';
 import { orderSchema } from '@/schemas';
-import { revalidatePath } from 'next/cache';
-import { Order } from '@prisma/client';
 
 export const createOrder = actionClient
   .schema(orderSchema)

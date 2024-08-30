@@ -1,34 +1,28 @@
 'use client';
 
-import Link from 'next/link';
-import { z } from 'zod';
-import { toast } from 'sonner';
-import { useForm, useFieldArray, useWatch } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Customer, Order, Product } from '@prisma/client';
-import { Check, ChevronLeft, ChevronsUpDown, Minus, Plus, PlusCircle } from 'lucide-react';
+import { Customer, Order, OrderItem, Product } from '@prisma/client';
+import { Check, ChevronsUpDown, Minus, Plus } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
+import { useRouter } from 'next/navigation';
+import { useForm, useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
+import { createOrder } from '@/actions/order/create-order';
 import { cn } from '@/lib/utils';
 import { orderSchema } from '@/schemas';
-import { createOrder } from '@/actions/order/create-order';
-import { deleteOrder } from '@/actions/order/delete-order';
 
 import { Button } from '@/components/ui/button';
-import { CardWrapper } from '@/components/card-wrapper';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-
-import { OrderProducts } from './order-products';
-import { OrderQuantity } from './order-quantity';
-import { Checkbox } from '../ui/checkbox';
-import { Input } from '../ui/input';
 
 type Props = {
   customers: Customer[];
   products: Product[];
+  initialData?: (Order & { OrderItem: OrderItem[] }) | null;
 };
 
 export const OrderForm: React.FC<Props> = ({ customers, products }) => {
@@ -43,11 +37,6 @@ export const OrderForm: React.FC<Props> = ({ customers, products }) => {
       isDelivered: false,
       products: [],
     },
-  });
-
-  const selectedProducts = useWatch({
-    control: form.control,
-    name: 'products',
   });
 
   const { execute, isPending } = useAction(createOrder, {

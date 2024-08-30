@@ -1,4 +1,3 @@
-import { Package } from 'lucide-react';
 import { ImageResponse } from 'next/og';
 
 // Image metadata

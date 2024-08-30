@@ -1,26 +1,20 @@
 'use client';
 
-import Link from 'next/link';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { useAction } from 'next-safe-action/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronLeft, PlusCircle } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { customerSchema } from '@/schemas';
 
-import { Input } from '@/components/ui/input';
-import { Tiptap } from '@/components/tiptap';
 import { Button } from '@/components/ui/button';
-import { CardWrapper } from '@/components/card-wrapper';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
-import { Customer } from '@prisma/client';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import { createCustomer } from '@/actions/customer/create-customer';
-import { deleteCustomer } from '@/actions/customer/delete-customer';
+import { Customer } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 type Props = {
   initialData?: Customer | null;

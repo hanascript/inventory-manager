@@ -1,32 +1,17 @@
-import Link from 'next/link';
 import {
-  Activity,
-  ArrowUpRight,
-  CreditCard,
   DollarSign,
   Package,
-  ShoppingBag,
-  TableCellsSplit,
-  Users,
+  ShoppingBag
 } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-// import { chartConfig, getGraphRevenue } from '@/actions/get-graph-revenue';
-import { CardWrapper } from '@/components/card-wrapper';
-import { getStockCount } from '@/actions/get-stock-count';
-import { getSalesCount } from '@/actions/get-sales-count';
 import { getRecentOrders } from '@/actions/get-recent-orders';
-import { Bar, BarChart } from 'recharts';
-
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-
-import { type ChartConfig } from '@/components/ui/chart';
-import { Analytics } from '@/components/analytics';
+import { getSalesCount } from '@/actions/get-sales-count';
+import { getStockCount } from '@/actions/get-stock-count';
 import { getGraphRevenue } from '@/actions/get-graph-revenue';
+
+
+import { Analytics } from '@/components/analytics';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function Home() {
   const graphData = await getGraphRevenue();
