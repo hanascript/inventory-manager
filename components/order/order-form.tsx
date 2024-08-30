@@ -25,17 +25,17 @@ type Props = {
   initialData?: (Order & { OrderItem: OrderItem[] }) | null;
 };
 
-export const OrderForm: React.FC<Props> = ({ customers, products }) => {
+export const OrderForm: React.FC<Props> = ({ initialData, customers, products }) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof orderSchema>>({
     resolver: zodResolver(orderSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       id: 'new',
       customerId: '',
       isPaid: false,
       isDelivered: false,
-      products: [],
+      OrderItem: [],
     },
   });
 
@@ -156,7 +156,7 @@ export const OrderForm: React.FC<Props> = ({ customers, products }) => {
 
         <FormField
           control={form.control}
-          name='products'
+          name='OrderItem'
           render={() => (
             <FormItem>
               <div className='mb-4'>
@@ -167,7 +167,7 @@ export const OrderForm: React.FC<Props> = ({ customers, products }) => {
                 <FormField
                   key={product.id}
                   control={form.control}
-                  name='products'
+                  name='OrderItem'
                   render={({ field }) => {
                     const existingProduct = field.value?.find(value => value.productId === product.id);
 

@@ -54,7 +54,7 @@ export const orderSchema = z.object({
   customerId: z.string(),
   isPaid: z.boolean(),
   isDelivered: z.boolean(),
-  products: z.array(orderItemSchema),
+  OrderItem: z.array(orderItemSchema),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
 });
