@@ -48,14 +48,8 @@ export const Analytics = ({ data }: Props) => {
         <ChartTooltip content={<ChartTooltipContent />} />
         <ChartLegend content={<ChartLegendContent />} />
         <Bar
-          dataKey='desktop'
-          fill='var(--color-desktop)'
-          radius={4}
-        />
-        <Bar
-          dataKey='mobile'
-          fill='var(--color-mobile)'
-          radius={4}
+          dataKey='total'
+          radius={3}
         />
       </BarChart>
     </ChartContainer>
