@@ -24,6 +24,8 @@ export const deleteProduct = actionClient
     }
 
     revalidatePath('/products');
+    revalidatePath('/');
+
     return {
       success: 'Product deleted successfully',
     };

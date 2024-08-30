@@ -37,6 +37,8 @@ export const createCustomer = actionClient
     }
 
     revalidatePath('/customers');
+    revalidatePath('/');
+
     return {
       success: 'Customers updated successfully',
     };

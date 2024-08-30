@@ -41,6 +41,7 @@ export const createProduct = actionClient
     }
 
     revalidatePath('/products');
+    revalidatePath('/');
 
     return {
       success: 'Product updated successfully.',

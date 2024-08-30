@@ -26,6 +26,8 @@ export const deleteCustomer = actionClient
     }
 
     revalidatePath('/customers');
+    revalidatePath('/');
+
     return {
       success: 'Customer deleted successfully',
     };

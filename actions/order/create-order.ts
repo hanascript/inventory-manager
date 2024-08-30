@@ -85,6 +85,7 @@ export const createOrder = actionClient
     }
 
     revalidatePath('/orders');
+    revalidatePath('/');
 
     return {
       success: 'Order updated successfully.',

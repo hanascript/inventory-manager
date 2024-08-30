@@ -29,5 +29,7 @@ export const deleteOrder = actionClient
     console.log('Deleted Order');
 
     revalidatePath('/orders');
+    revalidatePath('/');
+
     redirect('/orders');
   });
