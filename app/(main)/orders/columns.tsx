@@ -19,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
+import { deleteOrder } from '@/actions/order/delete-order';
 
 type OrderCollum = {
   id: string;
@@ -75,44 +75,17 @@ export const columns: ColumnDef<OrderCollum>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <div className='grid place-items-end'>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant='ghost'
-                className='h-8 w-8 p-0'
-              >
-                <span className='sr-only'>Open menu</span>
-                <MoreHorizontal className='h-4 w-4' />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-                Copy payment ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => <CellAction id={row.original.id} />,
   },
 ];
 
 const CellAction = ({ id }: { id: string }) => {
   const router = useRouter();
 
-  const { execute, isPending } = useAction(deleteProduct, {
+  const { execute, isPending } = useAction(deleteOrder, {
     onSuccess: ({ data }) => {
       toast.success(data?.success);
-      router.push('/products');
+      router.push('/orders');
     },
     onError: () => {
       toast.error('Error deleting product');
@@ -134,7 +107,7 @@ const CellAction = ({ id }: { id: string }) => {
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/products/${id}`)}
+            onClick={() => router.push(`/orders/${id}`)}
             disabled={isPending}
           >
             <Edit className='mr-2 h-4 w-4' /> Update

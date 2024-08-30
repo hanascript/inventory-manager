@@ -21,15 +21,13 @@ export const deleteOrder = actionClient
         },
       });
     } catch (error) {
-      return {
-        error: 'Error deleting order',
-      };
+      throw new Error('Error deleting product');
     }
-
-    console.log('Deleted Order');
 
     revalidatePath('/orders');
     revalidatePath('/');
 
-    redirect('/orders');
+    return {
+      success: 'Order deleted successfully',
+    };
   });
