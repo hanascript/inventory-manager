@@ -50,7 +50,6 @@ export const ProductForm: React.FC<Props> = ({ id, initialData, onSubmit, onDele
         onSubmit={form.handleSubmit(handleSubmit)}
         className='p-4 space-y-4 h-full'
       >
-        {/* <UploadDropzone endpoint='imageUploader' /> */}
         <FormField
           control={form.control}
           name='name'
