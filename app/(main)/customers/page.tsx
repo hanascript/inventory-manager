@@ -1,20 +1,10 @@
-import { DataTable } from '@/components/data-table';
-import db from '@/lib/db';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Footer } from '@/components/footer';
-import { columns } from './columns';
+import { getCustomers } from '@/features/customers/actions/get-customers';
+import { CustomerClient } from '@/features/customers/components/customer-client';
 
 export default async function CustomersPage() {
-  const customers = await db.customer.findMany();
+  const customersQuery = await getCustomers();
 
-  if (!customers) throw new Error('No customers found');
+  const customers = customersQuery || [];
 
-  return (
-    <DataTable
-      ctx='customer'
-      filter='email'
-      columns={columns}
-      data={customers}
-    />
-  );
+  return <CustomerClient customers={customers} />;
 }

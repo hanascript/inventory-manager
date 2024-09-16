@@ -1,16 +1,16 @@
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
-import { createProduct } from '@/features/products/actions/create-product';
-import { ProductForm } from '@/features/products/components/product-form';
-import { useNewProduct } from '@/features/products/hooks/use-new-product';
+import { createCustomer } from '@/features/customers/actions/create-customer';
+import { CustomerForm } from '@/features/customers/components/customer-form';
+import { useNewCustomer } from '@/features/customers/hooks/use-new-customer';
 
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
-export const NewProductDrawer = () => {
-  const { isOpen, onClose } = useNewProduct();
+export const NewCustomerDrawer = () => {
+  const { isOpen, onClose } = useNewCustomer();
 
-  const { execute, isPending } = useAction(createProduct, {
+  const { execute, isPending } = useAction(createCustomer, {
     onSuccess: ({ data }) => {
       toast.success(data?.message);
       onClose();
@@ -27,10 +27,10 @@ export const NewProductDrawer = () => {
     >
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>New Product</DrawerTitle>
-          <DrawerDescription>Create a new product to add to your store.</DrawerDescription>
+          <DrawerTitle>New Customer</DrawerTitle>
+          <DrawerDescription>Create a new customer to add to your store.</DrawerDescription>
         </DrawerHeader>
-        <ProductForm
+        <CustomerForm
           onSubmit={execute}
           disabled={isPending}
         />

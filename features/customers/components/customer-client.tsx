@@ -1,15 +1,14 @@
 'use client';
 
-import { Product } from '@prisma/client';
+import { Customer } from '@prisma/client';
 import { Plus } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
-
-import { MAX_PRODUCTS } from '@/constants';
-import { bulkDeleteProduct } from '@/features/products/actions/bulk-delete-product';
-import { columns } from '@/features/products/components/columns';
-import { useNewProduct } from '@/features/products/hooks/use-new-product';
+import { MAX_CUSTOMERS } from '@/constants';
+import { bulkDeleteCustomer } from '@/features/customers/actions/bulk-delete-customer';
+import { columns } from '@/features/customers/components/columns';
+import { useNewCustomer } from '@/features/customers/hooks/use-new-customer';
 
 import { DataTable } from '@/components/data-table';
 import { Footer } from '@/components/footer';
@@ -17,18 +16,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Props = {
-  products: Product[];
+  customers: Customer[];
 };
 
-export const ProductClient = ({ products }: Props) => {
-  const newProduct = useNewProduct();
+export const CustomerClient = ({ customers }: Props) => {
+  const newCustomer = useNewCustomer();
 
-  const { execute, isPending } = useAction(bulkDeleteProduct, {
+  const { execute, isPending } = useAction(bulkDeleteCustomer, {
     onSuccess: ({ data }) => {
       toast.success(data?.message);
     },
     onError: () => {
-      toast.error('Error deleting products');
+      toast.error('Error deleting customers');
     },
   });
 
@@ -36,15 +35,15 @@ export const ProductClient = ({ products }: Props) => {
     <Card className='flex-1 border-none rounded-none md:rounded-2xl shadow-md flex flex-col'>
       <CardHeader className='p-3 px-6 bg-muted/80 rounded-none md:rounded-t-2xl flex flex-row justify-between items-center border-b'>
         <div>
-          <CardTitle className='text-lg'>Products</CardTitle>
+          <CardTitle className='text-lg'>Customers</CardTitle>
           <CardDescription className='text-xs'>
-            Max Products: {products.length}/{MAX_PRODUCTS}
+            Max Customers: {customers.length}/{MAX_CUSTOMERS}
           </CardDescription>
         </div>
         <Button
           size='sm'
           className='text-sm gap-1'
-          onClick={newProduct.onOpen}
+          onClick={newCustomer.onOpen}
         >
           <Plus className='size-4 mr-2' />
           Add new
@@ -54,7 +53,7 @@ export const ProductClient = ({ products }: Props) => {
         <DataTable
           filterKey='name'
           columns={columns}
-          data={products}
+          data={customers}
           onDelete={row => {
             const ids = row.map(r => r.original.id);
             execute({ ids });

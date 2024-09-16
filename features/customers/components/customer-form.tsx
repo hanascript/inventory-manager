@@ -1,32 +1,30 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAction } from 'next-safe-action/hooks';
+import { Customer } from '@prisma/client';
+import { DollarSign, HashIcon, Trash } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { customerSchema } from '@/schemas';
+import { customerSchema } from '@/features/customers/types';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { createCustomer } from '@/actions/customer/create-customer';
-import { Customer } from '@prisma/client';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+type FormValues = z.input<typeof customerSchema>;
 
 type Props = {
+  id?: string;
   initialData?: Customer | null;
+  onSubmit: (values: FormValues) => void;
+  onDelete?: () => void;
+  disabled: boolean;
 };
 
-export const CustomerForm: React.FC<Props> = ({ initialData }) => {
-  const router = useRouter();
-
-  const form = useForm<z.infer<typeof customerSchema>>({
+export const CustomerForm: React.FC<Props> = ({ id, initialData, onSubmit, onDelete, disabled }) => {
+  const form = useForm<FormValues>({
     resolver: zodResolver(customerSchema),
     defaultValues: initialData || {
-      id: 'new',
+      id: '',
       name: '',
       email: '',
       address: '',
@@ -34,18 +32,12 @@ export const CustomerForm: React.FC<Props> = ({ initialData }) => {
     },
   });
 
-  const { execute, isPending } = useAction(createCustomer, {
-    onSuccess: ({ data }) => {
-      toast.success(data?.success);
-      router.push('/customers');
-    },
-    onError: () => {
-      toast.error('Error creating customer');
-    },
-  });
+  const handleSubmit = (data: FormValues) => {
+    onSubmit(data);
+  };
 
-  const handleSubmit = (data: z.infer<typeof customerSchema>) => {
-    execute(data);
+  const handleDelete = () => {
+    onDelete?.();
   };
 
   return (
@@ -65,7 +57,7 @@ export const CustomerForm: React.FC<Props> = ({ initialData }) => {
                   className='w-full'
                   placeholder='Bob Smith'
                   autoComplete='off'
-                  disabled={isPending}
+                  disabled={disabled}
                   {...field}
                 />
               </FormControl>
@@ -84,7 +76,7 @@ export const CustomerForm: React.FC<Props> = ({ initialData }) => {
                   className='w-full'
                   placeholder='bob@example.com'
                   autoComplete='off'
-                  disabled={isPending}
+                  disabled={disabled}
                   {...field}
                 />
               </FormControl>
@@ -103,7 +95,7 @@ export const CustomerForm: React.FC<Props> = ({ initialData }) => {
                   className='w-full'
                   placeholder='123 Main Street'
                   autoComplete='off'
-                  disabled={isPending}
+                  disabled={disabled}
                   {...field}
                 />
               </FormControl>
@@ -122,7 +114,7 @@ export const CustomerForm: React.FC<Props> = ({ initialData }) => {
                   className='w-full'
                   placeholder='123-456-7890'
                   autoComplete='off'
-                  disabled={isPending}
+                  disabled={disabled}
                   {...field}
                 />
               </FormControl>
@@ -130,7 +122,24 @@ export const CustomerForm: React.FC<Props> = ({ initialData }) => {
             </FormItem>
           )}
         />
-        <Button className='w-full'>Submit</Button>
+        <Button
+          className='w-full'
+          disabled={disabled}
+        >
+          {id ? 'Save changes' : 'Create customer'}
+        </Button>
+        {!!id && (
+          <Button
+            type='button'
+            disabled={disabled}
+            onClick={handleDelete}
+            className='w-full'
+            variant='outline'
+          >
+            <Trash className='size-4 mr-2' />
+            Delete Customer
+          </Button>
+        )}
       </form>
     </Form>
   );

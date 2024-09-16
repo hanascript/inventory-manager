@@ -1,24 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getProduct } from '@/features/products/actions/get-product';
-import { Product } from '@prisma/client';
+import { getCustomer } from '@/features/customers/actions/get-customer';
+import { Customer } from '@prisma/client';
+import { useEffect, useState } from 'react';
 
-export const useGetProduct = (id?: string) => {
-  const [data, setData] = useState<Product | null>(null);
+export const useGetCustomer = (id?: string) => {
+  const [data, setData] = useState<Customer | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!id) return;
 
-    const fetchProduct = async () => {
+    const fetchCustomer = async () => {
       setIsLoading(true);
-      const product = await getProduct(id);
-      setData(product);
+      const customer = await getCustomer(id);
+      setData(customer);
       setIsLoading(false);
     };
 
-    fetchProduct();
+    fetchCustomer();
   }, [id]);
 
   return { data, isLoading };

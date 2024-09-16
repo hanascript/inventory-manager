@@ -1,15 +1,14 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { ArrowUpDown, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
-import { deleteProduct } from '@/features/products/actions/delete-product';
-import { useOpenProduct } from '@/features/products/hooks/use-open-product';
+import { deleteCustomer } from '@/features/customers/actions/delete-customer';
+import { useOpenCustomer } from '@/features/customers/hooks/use-open-customer';
 import { useConfirm } from '@/hooks/use-confirm';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -20,19 +19,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-type ProductCollum = {
+type CustomerCollum = {
   id: string;
   name: string;
-  description: string;
-  stock: number;
-  price: number;
-  isActive: boolean;
-  isArchived: boolean;
+  address: string;
+  phone: string | null;
+  email: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export const columns: ColumnDef<ProductCollum>[] = [
+export const columns: ColumnDef<CustomerCollum>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -53,40 +50,73 @@ export const columns: ColumnDef<ProductCollum>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'stock',
-    header: 'Stock',
-  },
-  {
-    accessorKey: 'price',
-    header: () => <div className='text-right'>Price</div>,
+    accessorKey: 'email',
+    header: ({ column }) => {
+      return (
+        <Button
+          className='hidden md:flex'
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Email
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      const price = parseFloat(row.getValue('price'));
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(price);
-
-      return <div className='text-right font-medium'>{formatted}</div>;
+      return <div className='px-4 font-medium hidden md:block'>{row.original.email}</div>;
     },
   },
   {
-    accessorKey: 'isActive',
-    header: 'Active',
-    cell: ({ row }) => (
-      <Badge variant={row.original.isActive ? 'outline' : 'default'}>{row.original.isActive ? 'Yes' : 'No'}</Badge>
-    ),
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Name
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className='px-4 font-medium'>{row.original.name}</div>;
+    },
   },
   {
-    accessorKey: 'isArchived',
-    header: 'Archived',
-    cell: ({ row }) => (
-      <Badge variant={row.original.isArchived ? 'outline' : 'default'}>{row.original.isArchived ? 'Yes' : 'No'}</Badge>
-    ),
+    accessorKey: 'address',
+    header: ({ column }) => {
+      return (
+        <Button
+          className='hidden md:flex'
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Address
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className='px-4 font-medium hidden md:block'>{row.original.address}</div>;
+    },
   },
+  {
+    accessorKey: 'phone',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Phone
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+  },
+
   {
     id: 'actions',
     cell: ({ row }) => <CellAction id={row.original.id} />,
@@ -96,16 +126,16 @@ export const columns: ColumnDef<ProductCollum>[] = [
 const CellAction = ({ id }: { id: string }) => {
   const [ConfirmDialog, confirm] = useConfirm(
     'Are you sure?',
-    'This will permanently delete this product. This action cannot be undone.'
+    'This will permanently delete this customer. This action cannot be undone.'
   );
-  const { onOpen } = useOpenProduct();
+  const { onOpen } = useOpenCustomer();
 
-  const { execute, isPending } = useAction(deleteProduct, {
+  const { execute, isPending } = useAction(deleteCustomer, {
     onSuccess: ({ data }) => {
       toast.success(data?.success);
     },
     onError: () => {
-      toast.error('Error deleting product');
+      toast.error('Error deleting customer');
     },
   });
 
@@ -118,7 +148,7 @@ const CellAction = ({ id }: { id: string }) => {
   };
 
   return (
-    <div className='grid place-items-end'>
+    <>
       <ConfirmDialog />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -146,6 +176,6 @@ const CellAction = ({ id }: { id: string }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </>
   );
 };

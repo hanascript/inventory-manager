@@ -1,21 +1,20 @@
-
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
-import { updateProduct } from '@/features/products/actions/update-product';
-import { ProductForm } from '@/features/products/components/product-form';
-import { useGetProduct } from '@/features/products/hooks/use-get-product';
-import { useOpenProduct } from '@/features/products/hooks/use-open-product';
+import { updateCustomer } from '@/features/customers/actions/update-customer';
+import { CustomerForm } from '@/features/customers/components/customer-form';
+import { useGetCustomer } from '@/features/customers/hooks/use-get-customer';
+import { useOpenCustomer } from '@/features/customers/hooks/use-open-customer';
 
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
-export const EditProductDrawer = () => {
-  const { isOpen, onClose, id } = useOpenProduct();
+export const EditCustomerDrawer = () => {
+  const { isOpen, onClose, id } = useOpenCustomer();
 
-  const { data, isLoading } = useGetProduct(id);
+  const { data, isLoading } = useGetCustomer(id);
 
-  const { execute, isPending } = useAction(updateProduct, {
+  const { execute, isPending } = useAction(updateCustomer, {
     onSuccess: ({ data }) => {
       toast.success(data?.message);
       onClose();
@@ -32,15 +31,15 @@ export const EditProductDrawer = () => {
     >
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Edit Product</DrawerTitle>
-          <DrawerDescription>Edit an existing product in your store.</DrawerDescription>
+          <DrawerTitle>Edit Customer</DrawerTitle>
+          <DrawerDescription>Edit an existing customer in your store.</DrawerDescription>
         </DrawerHeader>
         {isLoading ? (
           <div className='absolute inset-0 flex items-center justify-center'>
             <Loader2 className='size-4 text-muted-foreground animate-spin' />
           </div>
         ) : (
-          <ProductForm
+          <CustomerForm
             id={id}
             onSubmit={execute}
             disabled={isPending}
