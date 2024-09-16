@@ -1,12 +1,10 @@
-import { ourFileRouter } from '@/app/api/uploadthing/core';
-import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
-import { extractRouterConfig } from 'uploadthing/server';
 
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
+import { DrawerProvider } from '@/providers/drawer-provider';
 import './globals.css';
 
 const fontSans = FontSans({
@@ -31,11 +29,9 @@ export default function RootLayout({
     >
       <head />
       <body className={cn('min-h-screen bg-blue-100 font-sans antialiased', fontSans.variable)}>
-        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <Toaster
-          visibleToasts={8}
-          closeButton={true}
-        />
+
+        <DrawerProvider />
+        <Toaster />
         <div className='mx-auto max-w-6xl md:py-4 h-full'>{children}</div>
       </body>
     </html>

@@ -4,3 +4,5 @@ export const NAVLINKS = [
   { href: '/products', text: 'Products' },
   { href: '/customers', text: 'Customers' },
 ];
+
+export const MAX_PRODUCTS = 25;

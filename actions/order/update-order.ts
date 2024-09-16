@@ -9,7 +9,16 @@ import { orderSchema } from '@/schemas';
 export const createOrder = actionClient
   .schema(orderSchema)
   .action(async ({ parsedInput: { id, customerId, isDelivered, isPaid, OrderItem: products } }) => {
-    await db.order.create({
+    await db.orderItem.deleteMany({
+      where: {
+        orderId: id,
+      },
+    });
+
+    await db.order.update({
+      where: {
+        id,
+      },
       data: {
         customerId,
         isDelivered,
@@ -45,6 +54,6 @@ export const createOrder = actionClient
 
     return {
       successful: true,
-      message: 'Order created successfully!',
+      message: 'Order updated successfully!',
     };
   });

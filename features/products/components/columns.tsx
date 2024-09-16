@@ -3,10 +3,9 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { deleteProduct } from '@/actions/product/delete-product';
+import { deleteProduct } from '@/features/products/actions/delete-product';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,9 +15,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
+import { useConfirm } from '@/hooks/use-confirm';
+import { useOpenProduct } from '../hooks/use-open-product';
 
 type ProductCollum = {
   id: string;
@@ -94,7 +94,11 @@ export const columns: ColumnDef<ProductCollum>[] = [
 ];
 
 const CellAction = ({ id }: { id: string }) => {
-  const router = useRouter();
+  const [ConfirmDialog, confirm] = useConfirm(
+    'Are you sure?',
+    'This will permanently delete this product. This action cannot be undone.'
+  );
+  const { onOpen } = useOpenProduct();
 
   const { execute, isPending } = useAction(deleteProduct, {
     onSuccess: ({ data }) => {
@@ -105,8 +109,17 @@ const CellAction = ({ id }: { id: string }) => {
     },
   });
 
+  const onDelete = async () => {
+    const ok = await confirm();
+
+    if (ok) {
+      execute({ id });
+    }
+  };
+
   return (
     <div className='grid place-items-end'>
+      <ConfirmDialog />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -120,13 +133,13 @@ const CellAction = ({ id }: { id: string }) => {
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/products/${id}`)}
+            onClick={() => onOpen(id)}
             disabled={isPending}
           >
-            <Edit className='mr-2 h-4 w-4' /> Update
+            <Edit className='mr-2 h-4 w-4' /> Edit
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => execute({ id })}
+            onClick={() => onDelete()}
             disabled={isPending}
           >
             <Trash className='mr-2 h-4 w-4' /> Delete

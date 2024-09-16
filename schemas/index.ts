@@ -1,28 +1,5 @@
-import { create } from 'node:domain';
-import { describe } from 'node:test';
 import { z } from 'zod';
 
-const fileSchema = z.instanceof(File).refine(file => file.size === 0 || file.type.startsWith('image/'));
-
-const imageSchema = z.array(fileSchema).optional();
-
-const ACCEPTED_IMAGE_TYPES = ['jpeg', 'jpg', 'png', 'webp'];
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_IMAGE_MIME_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-
-export const productSchema = z.object({
-  id: z.string(),
-  name: z.string().min(1, { message: 'Name is too short.' }),
-  description: z.string().min(1, { message: 'Description is too short.' }),
-  price: z.coerce
-    .number({ invalid_type_error: 'Price must be a number' })
-    .positive({ message: 'Price must be a positive number' }),
-  stock: z.coerce
-    .number({ invalid_type_error: 'Stock must be a number' })
-    .positive({ message: 'Stock must be a positive number' }),
-  isActive: z.boolean(),
-  isArchived: z.boolean(),
-});
 
 export const customerSchema = z.object({
   id: z.string(),

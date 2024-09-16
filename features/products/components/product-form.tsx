@@ -1,16 +1,10 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Product } from '@prisma/client';
-import { DollarSign, HashIcon } from 'lucide-react';
-import { useAction } from 'next-safe-action/hooks';
-import { useRouter } from 'next/navigation';
+import { DollarSign, HashIcon, Trash } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { createProduct } from '@/actions/product/create-product';
-import { productSchema } from '@/schemas';
+import { productSchema } from '@/features/products/types';
 
 import { Tiptap } from '@/components/tiptap';
 import { Button } from '@/components/ui/button';
@@ -18,17 +12,21 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
+type FormValues = z.input<typeof productSchema>;
+
 type Props = {
+  id?: string;
   initialData?: Product | null;
+  onSubmit: (values: FormValues) => void;
+  onDelete?: () => void;
+  disabled: boolean;
 };
 
-export const ProductForm: React.FC<Props> = ({ initialData }) => {
-  const router = useRouter();
-
-  const form = useForm<z.infer<typeof productSchema>>({
+export const ProductForm: React.FC<Props> = ({ id, initialData, onSubmit, onDelete, disabled }) => {
+  const form = useForm<FormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: initialData || {
-      id: 'new',
+      id: '',
       name: '',
       description: '',
       price: 0,
@@ -38,19 +36,12 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
     },
   });
 
-  const { execute, isPending } = useAction(createProduct, {
-    onSuccess: ({ data }) => {
-      console.log(data);
-      toast.success('success');
-      router.push('/products');
-    },
-    onError: () => {
-      toast.error('An error has occurred.');
-    },
-  });
+  const handleSubmit = (data: FormValues) => {
+    onSubmit(data);
+  };
 
-  const handleSubmit = (data: z.infer<typeof productSchema>) => {
-    execute(data);
+  const handleDelete = () => {
+    onDelete?.();
   };
 
   return (
@@ -69,7 +60,7 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
               <FormControl>
                 <Input
                   placeholder='Saekdong Stripe'
-                  disabled={isPending}
+                  disabled={disabled}
                   {...field}
                 />
               </FormControl>
@@ -94,7 +85,7 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
                       {...field}
                       type='currency'
                       placeholder='Your price in USD'
-                      disabled={isPending}
+                      disabled={disabled}
                       step='0.1'
                       min={0}
                     />
@@ -120,7 +111,7 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
                       placeholder='0'
                       type='number'
                       step={1}
-                      disabled={isPending}
+                      disabled={disabled}
                       {...field}
                     />
                   </div>
@@ -139,7 +130,7 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
               <FormControl>
                 <Tiptap
                   value={field.value}
-                  disabled={isPending}
+                  disabled={disabled}
                 />
               </FormControl>
               <FormMessage />
@@ -157,7 +148,7 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    disabled={isPending}
+                    disabled={disabled}
                   />
                 </FormControl>
                 <div className='space-y-1 leading-none'>
@@ -176,7 +167,7 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    disabled={isPending}
+                    disabled={disabled}
                   />
                 </FormControl>
                 <div className='space-y-1 leading-none'>
@@ -187,7 +178,24 @@ export const ProductForm: React.FC<Props> = ({ initialData }) => {
             )}
           />
         </div>
-        <Button className='w-full'>Submit</Button>
+        <Button
+          className='w-full'
+          disabled={disabled}
+        >
+          {id ? 'Save changes' : 'Create product'}
+        </Button>
+        {!!id && (
+          <Button
+            type='button'
+            disabled={disabled}
+            onClick={handleDelete}
+            className='w-full'
+            variant='outline'
+          >
+            <Trash className='size-4 mr-2' />
+            Delete Product
+          </Button>
+        )}
       </form>
     </Form>
   );

@@ -8,36 +8,40 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
   SortingState,
   useReactTable,
-  VisibilityState,
 } from '@tanstack/react-table';
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Trash
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Trash } from 'lucide-react';
 import { useState } from 'react';
-
-import { contextDelete } from '@/actions/context-delete';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useConfirm } from '@/hooks/use-confirm';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  filter: string;
-  ctx: 'product' | 'order' | 'customer';
+  filterKey: string;
+  onDelete: (rows: Row<TData>[]) => void;
+  disabled?: boolean;
 }
 
-export function DataTable<TData, TValue>({ columns, data, filter, ctx }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  filterKey,
+  onDelete,
+  disabled,
+}: DataTableProps<TData, TValue>) {
+  const [ConfirmDialog, confirm] = useConfirm(
+    'Are you sure?',
+    'This action can not be undone. Please be considerate, this is a public demo app.'
+  );
+
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
@@ -49,53 +53,42 @@ export function DataTable<TData, TValue>({ columns, data, filter, ctx }: DataTab
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
-      columnVisibility,
       rowSelection,
-    },
-    initialState: {
-      pagination: { pageIndex: 0, pageSize: 8 },
     },
   });
 
-  const handleDelete = () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-
-    selectedRows.forEach(row => {
-      contextDelete({
-        obj: row.original,
-        ctx,
-      });
-    });
-  };
-
   return (
     <div className='flex flex-col h-full'>
+      <ConfirmDialog />
       <div className='flex items-center justify-between px-4 border-b py-2'>
         <Input
-          placeholder={`Filter by ${filter}...`}
-          value={(table.getColumn(filter)?.getFilterValue() as string) ?? ''}
-          onChange={event => table.getColumn(filter)?.setFilterValue(event.target.value)}
-          className='max-w-[265px] h-8'
+          placeholder={`Filter by ${filterKey}...`}
+          value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ''}
+          onChange={event => table.getColumn(filterKey)?.setFilterValue(event.target.value)}
+          className='max-w-xs h-8'
         />
-        <div className='text-sm text-muted-foreground flex items-center gap-4'>
-          {table.getFilteredSelectedRowModel().rows.length > 0 && (
-            <Button
-              size='icon'
-              variant='destructive'
-              className='size-8'
-              onClick={handleDelete}
-            >
-              <Trash className='size-4' />
-            </Button>
-          )}
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
-        </div>
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+          <Button
+            size='sm'
+            variant='outline'
+            className='h-8'
+            onClick={async () => {
+              const ok = await confirm();
+
+              if (ok) {
+                onDelete(table.getFilteredSelectedRowModel().rows);
+                table.resetRowSelection();
+              }
+            }}
+          >
+            <Trash className='size-4 mr-2' />
+            Delete ({table.getFilteredSelectedRowModel().rows.length})
+          </Button>
+        )}
       </div>
       <Table>
         <TableHeader>
@@ -139,42 +132,26 @@ export function DataTable<TData, TValue>({ columns, data, filter, ctx }: DataTab
         <div className='flex w-[100px] items-center justify-center text-sm font-medium'>
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </div>
-        <div className='flex items-center space-x-2'>
+        <div className='flex items-center gap-4'>
           <Button
             variant='outline'
-            className='hidden h-8 w-8 p-0 lg:flex'
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className='sr-only'>Go to first page</span>
-            <ChevronsLeft className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='outline'
-            className='h-8 w-8 p-0'
+            className='h-8'
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
             <span className='sr-only'>Go to previous page</span>
             <ChevronLeft className='h-4 w-4' />
+            Back
           </Button>
           <Button
             variant='outline'
-            className='h-8 w-8 p-0'
+            className='h-8'
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
             <span className='sr-only'>Go to next page</span>
+            Next
             <ChevronRight className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='outline'
-            className='hidden h-8 w-8 p-0 lg:flex'
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className='sr-only'>Go to last page</span>
-            <ChevronsRight className='h-4 w-4' />
           </Button>
         </div>
       </div>

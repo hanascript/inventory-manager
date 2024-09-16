@@ -6,7 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { deleteProduct } from '@/actions/product/delete-product';
+import { deleteProduct } from '@/features/products/actions/delete-product';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

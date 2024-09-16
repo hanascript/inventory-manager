@@ -8,8 +8,11 @@ import { customerSchema } from '@/schemas';
 
 export const createCustomer = actionClient
   .schema(customerSchema)
-  .action(async ({ parsedInput: { name, address, email, phone } }) => {
-    await db.customer.create({
+  .action(async ({ parsedInput: { id, name, address, email, phone } }) => {
+    await db.customer.update({
+      where: {
+        id,
+      },
       data: {
         name,
         address,
@@ -24,6 +27,6 @@ export const createCustomer = actionClient
 
     return {
       successful: true,
-      message: 'Customer created successfully!',
+      message: 'Customer updated successfully!',
     };
   });

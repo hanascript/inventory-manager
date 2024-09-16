@@ -1,19 +1,10 @@
-import { DataTable } from '@/components/data-table';
-import db from '@/lib/db';
-
-import { columns } from './columns';
+import { getProducts } from '@/features/products/actions/get-products';
+import { ProductClient } from '@/features/products/components/product-client';
 
 export default async function ProductsPage() {
-  const products = await db.product.findMany();
+  const productsQuery = await getProducts();
 
-  if (!products) throw new Error('No products found');
+  const products = productsQuery || [];
 
-  return (
-    <DataTable
-      ctx='product'
-      filter='name'
-      columns={columns}
-      data={products}
-    />
-  );
+  return <ProductClient products={products} />;
 }
