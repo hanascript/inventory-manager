@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { ArrowUpDown, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
@@ -54,15 +54,51 @@ export const columns: ColumnDef<ProductCollum>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Name
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className='px-4 font-medium'>{row.original.name}</div>;
+    },
   },
   {
     accessorKey: 'stock',
-    header: 'Stock',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Stock
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className='px-4 font-medium'>{row.original.stock}</div>;
+    },
   },
   {
     accessorKey: 'price',
-    header: () => <div className='text-right'>Price</div>,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Price
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const price = parseFloat(row.getValue('price'));
       const formatted = new Intl.NumberFormat('en-US', {
@@ -70,21 +106,49 @@ export const columns: ColumnDef<ProductCollum>[] = [
         currency: 'USD',
       }).format(price);
 
-      return <div className='text-right font-medium'>{formatted}</div>;
+      return <div className='px-4 font-medium'>{formatted}</div>;
     },
   },
   {
     accessorKey: 'isActive',
-    header: 'Active',
+    header: ({ column }) => {
+      return (
+        <Button
+          className='hidden md:flex'
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Active
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
-      <Badge variant={row.original.isActive ? 'outline' : 'default'}>{row.original.isActive ? 'Yes' : 'No'}</Badge>
+      <div className='px-4 font-medium hidden md:block'>
+        <Badge variant={row.original.isActive ? 'outline' : 'default'}>{row.original.isActive ? 'Yes' : 'No'}</Badge>
+      </div>
     ),
   },
   {
     accessorKey: 'isArchived',
-    header: 'Archived',
+    header: ({ column }) => {
+      return (
+        <Button
+          className='hidden md:flex'
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Archived
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
-      <Badge variant={row.original.isArchived ? 'outline' : 'default'}>{row.original.isArchived ? 'Yes' : 'No'}</Badge>
+      <div className='px-4 font-medium hidden md:block'>
+        <Badge variant={row.original.isArchived ? 'outline' : 'default'}>
+          {row.original.isArchived ? 'Yes' : 'No'}
+        </Badge>
+      </div>
     ),
   },
   {
@@ -118,7 +182,7 @@ const CellAction = ({ id }: { id: string }) => {
   };
 
   return (
-    <div className='grid place-items-end'>
+    <>
       <ConfirmDialog />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -146,6 +210,6 @@ const CellAction = ({ id }: { id: string }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </>
   );
 };
