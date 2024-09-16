@@ -6,6 +6,8 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
 import { deleteProduct } from '@/features/products/actions/delete-product';
+import { useOpenProduct } from '@/features/products/hooks/use-open-product';
+import { useConfirm } from '@/hooks/use-confirm';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,8 +19,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useConfirm } from '@/hooks/use-confirm';
-import { useOpenProduct } from '../hooks/use-open-product';
 
 type ProductCollum = {
   id: string;

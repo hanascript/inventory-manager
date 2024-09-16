@@ -4,16 +4,17 @@ import { revalidatePath } from 'next/cache';
 import sanitizeHtml from 'sanitize-html';
 
 import db from '@/lib/db';
-import { actionClient } from '@/lib/safe-action';
-import { productSchema } from '@/features/products/types';
+
 import { MAX_PRODUCTS } from '@/constants';
+import { productSchema } from '@/features/products/types';
+import { actionClient } from '@/lib/safe-action';
 
 export const createProduct = actionClient
   .schema(productSchema)
   .action(async ({ parsedInput: { name, description, stock, price, isActive, isArchived } }) => {
     const products = await db.product.findMany();
 
-    if (products.length >= 7) {
+    if (products.length >=  MAX_PRODUCTS) {
       throw new Error(`Max Products reached!`);
     }
 

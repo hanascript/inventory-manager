@@ -1,15 +1,14 @@
-import { useNewProduct } from '@/features/products/hooks/use-new-product';
 
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
-import { createProduct } from '../actions/create-product';
-import { updateProduct } from '../actions/update-product';
-import { ProductForm } from './product-form';
-import { useOpenProduct } from '../hooks/use-open-product';
-import { getProduct } from '../actions/get-product';
-import { useGetProduct } from '../hooks/use-get-product';
-import { Loader2 } from 'lucide-react';
+
+import { updateProduct } from '@/features/products/actions/update-product';
+import { ProductForm } from '@/features/products/components/product-form';
+import { useGetProduct } from '@/features/products/hooks/use-get-product';
+import { useOpenProduct } from '@/features/products/hooks/use-open-product';
+
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 export const EditProductDrawer = () => {
   const { isOpen, onClose, id } = useOpenProduct();

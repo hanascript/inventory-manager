@@ -1,11 +1,11 @@
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
+
+import { createProduct } from '@/features/products/actions/create-product';
+import { ProductForm } from '@/features/products/components/product-form';
 import { useNewProduct } from '@/features/products/hooks/use-new-product';
 
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { useAction } from 'next-safe-action/hooks';
-import { toast } from 'sonner';
-import { createProduct } from '../actions/create-product';
-import { updateProduct } from '../actions/update-product';
-import { ProductForm } from './product-form';
 
 export const NewProductDrawer = () => {
   const { isOpen, onClose } = useNewProduct();

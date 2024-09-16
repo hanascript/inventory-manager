@@ -1,20 +1,20 @@
 'use client';
 
-import { toast } from 'sonner';
-import { useAction } from 'next-safe-action/hooks';
-import { Plus } from 'lucide-react';
-
 import { Product } from '@prisma/client';
+import { Plus } from 'lucide-react';
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'sonner';
+
 
 import { MAX_PRODUCTS } from '@/constants';
+import { bulkDeleteProduct } from '@/features/products/actions/bulk-delete-product';
+import { columns } from '@/features/products/components/columns';
+import { useNewProduct } from '@/features/products/hooks/use-new-product';
 
 import { DataTable } from '@/components/data-table';
 import { Footer } from '@/components/footer';
-import { columns } from '@/features/products/components/columns';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useNewProduct } from '@/features/products/hooks/use-new-product';
 import { Button } from '@/components/ui/button';
-import { bulkDeleteProduct } from '@/features/products/actions/bulk-delete-product';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Props = {
   products: Product[];

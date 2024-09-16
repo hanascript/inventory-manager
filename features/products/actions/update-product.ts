@@ -1,11 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import sanitizeHtml from 'sanitize-html';
 
 import db from '@/lib/db';
-import { actionClient } from '@/lib/safe-action';
+
 import { productSchema } from '@/features/products/types';
-import sanitizeHtml from 'sanitize-html';
+import { actionClient } from '@/lib/safe-action';
 
 export const updateProduct = actionClient
   .schema(productSchema)
