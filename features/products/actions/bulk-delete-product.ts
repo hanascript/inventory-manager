@@ -1,11 +1,12 @@
 'use server';
 
-import db from '@/lib/db';
-import { actionClient } from '@/lib/safe-action';
-import { deleteSchema } from '../types';
 import { revalidatePath } from 'next/cache';
 
-export const bulkDeleteProduct = actionClient.schema(deleteSchema).action(async ({ parsedInput: { ids } }) => {
+import { productDeleteSchema } from '@/features/products/types';
+import db from '@/lib/db';
+import { actionClient } from '@/lib/safe-action';
+
+export const bulkDeleteProduct = actionClient.schema(productDeleteSchema).action(async ({ parsedInput: { ids } }) => {
   await db.product.deleteMany({
     where: {
       id: {

@@ -6,3 +6,4 @@ export const NAVLINKS = [
 ];
 
 export const MAX_PRODUCTS = 25;
+export const MAX_CUSTOMERS = 25;

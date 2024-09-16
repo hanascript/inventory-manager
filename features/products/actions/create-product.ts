@@ -10,11 +10,11 @@ import { productSchema } from '@/features/products/types';
 import { actionClient } from '@/lib/safe-action';
 
 export const createProduct = actionClient
-  .schema(productSchema)
+  .schema(productSchema.omit({ id: true }))
   .action(async ({ parsedInput: { name, description, stock, price, isActive, isArchived } }) => {
     const products = await db.product.findMany();
 
-    if (products.length >=  MAX_PRODUCTS) {
+    if (products.length >= MAX_PRODUCTS) {
       throw new Error(`Max Products reached!`);
     }
 

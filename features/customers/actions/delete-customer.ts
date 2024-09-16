@@ -20,9 +20,7 @@ export const deleteCustomer = actionClient
         },
       });
     } catch (error) {
-      return {
-        error: 'Error deleting customer',
-      };
+      throw new Error('Error deleting customer');
     }
 
     revalidatePath('/customers');

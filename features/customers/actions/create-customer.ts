@@ -1,14 +1,23 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import sanitizeHtml from 'sanitize-html';
 
 import db from '@/lib/db';
+
+import { MAX_CUSTOMERS } from '@/constants';
+import { customerSchema } from '@/features/customers/types';
 import { actionClient } from '@/lib/safe-action';
-import { customerSchema } from '@/schemas';
 
 export const createCustomer = actionClient
-  .schema(customerSchema)
+  .schema(customerSchema.omit({ id: true }))
   .action(async ({ parsedInput: { name, address, email, phone } }) => {
+    const customers = await db.customer.findMany();
+
+    if (customers.length >= MAX_CUSTOMERS) {
+      throw new Error(`Max Customers reached!`);
+    }
+
     await db.customer.create({
       data: {
         name,

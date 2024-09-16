@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const deleteSchema = z.object({
+export const productDeleteSchema = z.object({
   ids: z.array(z.string()),
 });
 
