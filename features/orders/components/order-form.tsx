@@ -1,37 +1,35 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Customer, Order, OrderItem, Product } from '@prisma/client';
-import { Check, ChevronsUpDown, Minus, Plus } from 'lucide-react';
-import { useAction } from 'next-safe-action/hooks';
-import { useRouter } from 'next/navigation';
-import { useForm, useWatch } from 'react-hook-form';
-import { toast } from 'sonner';
+import { Check, ChevronsUpDown, DollarSign, HashIcon, Minus, Plus, Trash } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { createOrder } from '@/actions/order/create-order';
-import { cn } from '@/lib/utils';
-import { orderSchema } from '@/schemas';
+import { orderSchema } from '@/features/orders/types';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+
+type FormValues = z.input<typeof orderSchema>;
 
 type Props = {
+  id?: string;
   customers: Customer[];
   products: Product[];
   initialData?: (Order & { OrderItem: OrderItem[] }) | null;
+  onSubmit: (values: FormValues) => void;
+  onDelete?: () => void;
+  disabled: boolean;
 };
 
-export const OrderForm: React.FC<Props> = ({ initialData, customers, products }) => {
-  const router = useRouter();
-
-  const form = useForm<z.infer<typeof orderSchema>>({
+export const OrderForm: React.FC<Props> = ({ id, customers, products, initialData, onSubmit, onDelete, disabled }) => {
+  const form = useForm<FormValues>({
     resolver: zodResolver(orderSchema),
     defaultValues: initialData || {
-      id: 'new',
+      id: '',
       customerId: '',
       isPaid: false,
       isDelivered: false,
@@ -39,25 +37,19 @@ export const OrderForm: React.FC<Props> = ({ initialData, customers, products })
     },
   });
 
-  const { execute, isPending } = useAction(createOrder, {
-    onSuccess: ({ data }) => {
-      toast.success(data?.success);
-      router.push('/orders');
-    },
-    onError: () => {
-      toast.error('Error creating order');
-    },
-  });
+  const handleSubmit = (data: FormValues) => {
+    onSubmit(data);
+  };
 
-  const handleSubmit = (data: z.infer<typeof orderSchema>) => {
-    execute(data);
+  const handleDelete = () => {
+    onDelete?.();
   };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className='p-4 h-full space-y-4'
+        className='p-4 space-y-4 h-full'
       >
         <FormField
           control={form.control}
@@ -119,7 +111,7 @@ export const OrderForm: React.FC<Props> = ({ initialData, customers, products })
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    disabled={isPending}
+                    disabled={disabled}
                   />
                 </FormControl>
                 <div className='space-y-1 leading-none'>
@@ -140,7 +132,7 @@ export const OrderForm: React.FC<Props> = ({ initialData, customers, products })
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    disabled={isPending}
+                    disabled={disabled}
                   />
                 </FormControl>
                 <div className='space-y-1 leading-none'>
@@ -181,7 +173,7 @@ export const OrderForm: React.FC<Props> = ({ initialData, customers, products })
                             <div className='flex items-center gap-3'>
                               <Checkbox
                                 checked={Boolean(existingProduct)}
-                                disabled={isPending || product.stock == 0}
+                                disabled={disabled || product.stock == 0}
                                 onCheckedChange={checked => {
                                   return checked
                                     ? field.onChange([
@@ -205,7 +197,7 @@ export const OrderForm: React.FC<Props> = ({ initialData, customers, products })
                                     className='h-8'
                                     size='icon'
                                     type='button'
-                                    disabled={isPending || product.stock == 0}
+                                    disabled={disabled || product.stock == 0}
                                     onClick={() => {
                                       if (existingProduct) {
                                         // Update quantity, if quantity != 1, then remove the product
@@ -231,7 +223,7 @@ export const OrderForm: React.FC<Props> = ({ initialData, customers, products })
                                     className='h-8'
                                     size='icon'
                                     type='button'
-                                    disabled={isPending || product.stock == 0}
+                                    disabled={disabled || product.stock == 0}
                                     onClick={() => {
                                       if (existingProduct) {
                                         // Update quantity, if quantity != product.stock, then add the product
@@ -265,7 +257,26 @@ export const OrderForm: React.FC<Props> = ({ initialData, customers, products })
             </FormItem>
           )}
         />
-        <Button className='w-full'>Submit</Button>
+        <div className='pb-6'>
+          <Button
+            className='w-full'
+            disabled={disabled}
+          >
+            {id ? 'Save changes' : 'Create customer'}
+          </Button>
+          {!!id && (
+            <Button
+              type='button'
+              disabled={disabled}
+              onClick={handleDelete}
+              className='w-full'
+              variant='outline'
+            >
+              <Trash className='size-4 mr-2' />
+              Delete Customer
+            </Button>
+        )}
+        </div>
       </form>
     </Form>
   );

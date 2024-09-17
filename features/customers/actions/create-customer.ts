@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import sanitizeHtml from 'sanitize-html';
 
 import db from '@/lib/db';
 

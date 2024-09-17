@@ -74,6 +74,7 @@ export const columns: ColumnDef<ProductCollum>[] = [
     header: ({ column }) => {
       return (
         <Button
+          className='hidden md:flex'
           variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -83,7 +84,7 @@ export const columns: ColumnDef<ProductCollum>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className='px-4 font-medium'>{row.original.stock}</div>;
+      return <div className='px-4 font-medium hidden md:block'>{row.original.stock}</div>;
     },
   },
   {

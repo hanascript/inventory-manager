@@ -1,13 +1,11 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { ArrowUpDown, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { deleteProduct } from '@/features/products/actions/delete-product';
-
+import { deleteOrder } from '@/actions/order/delete-order';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -16,10 +14,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteOrder } from '@/actions/order/delete-order';
+import { useConfirm } from '@/hooks/use-confirm';
+import { useOpenOrder } from '../hooks/use-open-order';
 
 type OrderCollum = {
   id: string;
@@ -53,24 +51,76 @@ export const columns: ColumnDef<OrderCollum>[] = [
   },
   {
     accessorKey: 'customer',
-    header: 'Customer',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Customer
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className='px-4 font-medium'>{row.original.customer}</div>;
+    },
   },
   {
     accessorKey: 'email',
-    header: 'Email',
+    header: ({ column }) => {
+      return (
+        <Button
+          className='hidden md:flex'
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Email
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className='px-4 font-medium hidden md:block'>{row.original.email}</div>;
+    },
   },
   {
     accessorKey: 'paid',
-    header: 'Paid',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Paid
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
-      <Badge variant={row.original.paid ? 'outline' : 'default'}>{row.original.paid ? 'Yes' : 'No'}</Badge>
+      <div className='px-4 font-medium'>
+        <Badge variant={row.original.paid ? 'outline' : 'default'}>{row.original.paid ? 'Yes' : 'No'}</Badge>
+      </div>
     ),
   },
   {
     accessorKey: 'delivered',
-    header: 'Delivered',
+    header: ({ column }) => {
+      return (
+        <Button
+          className='hidden md:flex'
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Delivered
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
-      <Badge variant={row.original.delivered ? 'outline' : 'default'}>{row.original.delivered ? 'Yes' : 'No'}</Badge>
+      <div className='px-4 font-medium hidden md:block'>
+        <Badge variant={row.original.delivered ? 'outline' : 'default'}>{row.original.delivered ? 'Yes' : 'No'}</Badge>
+      </div>
     ),
   },
   {
@@ -80,20 +130,32 @@ export const columns: ColumnDef<OrderCollum>[] = [
 ];
 
 const CellAction = ({ id }: { id: string }) => {
-  const router = useRouter();
+  const [ConfirmDialog, confirm] = useConfirm(
+    'Are you sure?',
+    'This will permanently delete this product. This action cannot be undone.'
+  );
+  const { onOpen } = useOpenOrder();
 
   const { execute, isPending } = useAction(deleteOrder, {
     onSuccess: ({ data }) => {
       toast.success(data?.success);
-      router.push('/orders');
     },
     onError: () => {
       toast.error('Error deleting product');
     },
   });
 
+  const onDelete = async () => {
+    const ok = await confirm();
+
+    if (ok) {
+      execute({ id });
+    }
+  };
+
   return (
-    <div className='w-full flex justify-end'>
+    <>
+      <ConfirmDialog />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -107,19 +169,19 @@ const CellAction = ({ id }: { id: string }) => {
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() => router.push(`/orders/${id}`)}
+            onClick={() => onOpen(id)}
             disabled={isPending}
           >
-            <Edit className='mr-2 h-4 w-4' /> Update
+            <Edit className='mr-2 h-4 w-4' /> Edit
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => execute({ id })}
+            onClick={() => onDelete()}
             disabled={isPending}
           >
             <Trash className='mr-2 h-4 w-4' /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </>
   );
 };
