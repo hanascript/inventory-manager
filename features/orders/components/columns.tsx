@@ -5,7 +5,7 @@ import { ArrowUpDown, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 
-import { deleteOrder } from '@/actions/order/delete-order';
+import { deleteOrder } from '@/features/orders/actions/delete-order';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
